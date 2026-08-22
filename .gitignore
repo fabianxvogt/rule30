@@ -1,6 +1,18 @@
+# Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 env/
+
+# OS
 .DS_Store
+
+# Compiled generator binary (build from rule30gen.c)
+experiments/rule30gen
+
+# Large generated datasets (regenerable; see experiments/rule30gen.c and
+# experiments/generate_bits.py). Small result summaries are tracked.
+results/center-column-15000000.txt
+results/center-column-1000000.txt
+results/gen15m-stderr.log
