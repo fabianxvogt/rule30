@@ -1,0 +1,22 @@
+h left_truncation right_truncation
+-- --------------- ----------------
+ 2           False             True
+ 3           False             True
+ 4           False             True
+ 5           False             True
+ 6           False             True
+ 7           False             True
+ 8           False             True
+ 9           False             True
+10           False             True
+11           False             True
+12           False             True
+13           False             True
+14           False             True
+15           False             True
+16           False             True
+17           False             True
+18           False             True
+19           False             True
+20           False             True
+21           False             True

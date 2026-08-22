@@ -1,0 +1,18 @@
+h b=0_commutes b=1_commutes
+-- ------------ ------------
+ 3         True         True
+ 4         True         True
+ 5         True         True
+ 6         True         True
+ 7         True         True
+ 8         True         True
+ 9         True         True
+10         True         True
+11         True         True
+12         True         True
+13         True         True
+14         True         True
+15         True         True
+16         True         True
+17         True         True
+18         True         True

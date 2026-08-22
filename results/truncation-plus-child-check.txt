@@ -1,0 +1,42 @@
+h injective_by_(trunc,tau0) injective_by_(trunc,tau1)
+-- ------------------------- -------------------------
+ 2                      True                      True
+ 3                     False                     False
+   tau0 collision: key=(2, 2) classes=[3, 4]
+   tau1 collision: key=(0, 2) classes=[0, 1]
+ 4                      True                      True
+ 5                     False                     False
+   tau0 collision: key=(6, 4) classes=[9, 10]
+   tau1 collision: key=(0, 4) classes=[0, 1]
+ 6                      True                      True
+ 7                     False                     False
+   tau0 collision: key=(4, 8) classes=[6, 7]
+   tau1 collision: key=(0, 9) classes=[0, 1]
+ 8                      True                      True
+ 9                     False                     False
+   tau0 collision: key=(6, 11) classes=[8, 9]
+   tau1 collision: key=(0, 19) classes=[0, 1]
+10                      True                      True
+11                     False                     False
+   tau0 collision: key=(8, 13) classes=[10, 11]
+   tau1 collision: key=(0, 38) classes=[0, 1]
+12                      True                      True
+13                     False                     False
+   tau0 collision: key=(11, 12) classes=[14, 15]
+   tau1 collision: key=(0, 77) classes=[0, 1]
+14                      True                      True
+15                     False                     False
+   tau0 collision: key=(10, 14) classes=[12, 13]
+   tau1 collision: key=(0, 147) classes=[0, 1]
+16                      True                      True
+17                     False                     False
+   tau0 collision: key=(14, 23) classes=[18, 20]
+   tau1 collision: key=(0, 280) classes=[0, 1]
+18                      True                      True
+19                     False                     False
+   tau0 collision: key=(17, 18) classes=[22, 23]
+   tau1 collision: key=(0, 523) classes=[0, 1]
+20                      True                      True
+21                     False                     False
+   tau0 collision: key=(15, 22) classes=[19, 20]
+   tau1 collision: key=(0, 958) classes=[0, 1]

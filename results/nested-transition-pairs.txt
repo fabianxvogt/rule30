@@ -1,0 +1,42 @@
+h |S_h| distinct (on0,on1) pairs injective multiplicities
+-- ----- ---------------------- --------- --------------
+ 2     3                      2     False {1: 1, 2: 1}
+   example collision: pair=(1, 0) classes=[1, 2]
+ 3     5                      4     False {1: 3, 2: 1}
+   example collision: pair=(2, 1) classes=[2, 3]
+ 4     7                      6     False {1: 5, 2: 1}
+   example collision: pair=(4, 2) classes=[3, 4]
+ 5    11                      9     False {1: 7, 2: 2}
+   example collision: pair=(6, 3) classes=[4, 7]
+ 6    16                     13     False {1: 10, 2: 3}
+   example collision: pair=(9, 4) classes=[6, 10]
+ 7    25                     20     False {1: 15, 2: 5}
+   example collision: pair=(13, 6) classes=[9, 16]
+ 8    35                     28     False {1: 21, 2: 7}
+   example collision: pair=(21, 9) classes=[12, 22]
+ 9    52                     42     False {1: 32, 2: 10}
+   example collision: pair=(29, 12) classes=[17, 33]
+10    71                     58     False {1: 45, 2: 13}
+   example collision: pair=(43, 17) classes=[23, 45]
+11   104                     85     False {1: 66, 2: 19}
+   example collision: pair=(59, 23) classes=[33, 66]
+12   141                    116     False {1: 91, 2: 25}
+   example collision: pair=(87, 33) classes=[45, 91]
+13   203                    169     False {1: 135, 2: 34}
+   example collision: pair=(118, 45) classes=[65, 129]
+14   272                    228     False {1: 184, 2: 44}
+   example collision: pair=(170, 65) classes=[87, 171]
+15   387                    325     False {1: 263, 2: 62}
+   example collision: pair=(227, 87) classes=[122, 243]
+16   517                    436     False {1: 355, 2: 81}
+   example collision: pair=(322, 122) classes=[165, 325]
+17   733                    618     False {1: 503, 2: 115}
+   example collision: pair=(430, 165) classes=[233, 457]
+18   971                    822     False {1: 673, 2: 149}
+   example collision: pair=(611, 233) classes=[309, 601]
+19  1364                   1154     False {1: 944, 2: 210}
+   example collision: pair=(807, 309) classes=[429, 844]
+20  1792                   1518     False {1: 1244, 2: 274}
+   example collision: pair=(1133, 429) classes=[560, 1103]
+21  2497                   2115     False {1: 1733, 2: 382}
+   example collision: pair=(1486, 560) classes=[771, 1533]

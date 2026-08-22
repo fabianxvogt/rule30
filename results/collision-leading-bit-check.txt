@@ -1,0 +1,17 @@
+h=2: ok, double-collisions=1
+h=3: ok, double-collisions=1
+h=4: ok, double-collisions=1
+h=5: ok, double-collisions=2
+h=6: ok, double-collisions=3
+h=7: ok, double-collisions=5
+h=8: ok, double-collisions=7
+h=9: ok, double-collisions=10
+h=10: ok, double-collisions=13
+h=11: ok, double-collisions=19
+h=12: ok, double-collisions=25
+h=13: ok, double-collisions=34
+h=14: ok, double-collisions=44
+h=15: ok, double-collisions=62
+h=16: ok, double-collisions=81
+h=17: ok, double-collisions=115
+h=18: ok, double-collisions=149

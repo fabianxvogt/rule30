@@ -1,0 +1,8 @@
+Checking simple identities:
+  double_pairs(h) == lead1(h-1): holds for [2, 3]
+  double_pairs(h) == lead0(h-1): holds for [2]
+  distinct_pairs(h) == total(h)-lead1(h): holds for [2]
+  distinct_pairs(h) == total(h)-lead0(h): holds for []
+  lead1(h) == double_pairs(h)+1: holds for [3]
+  lead1(h) == double_pairs(h): holds for [2]
+  lead0(h) == distinct_pairs(h): holds for [2]
