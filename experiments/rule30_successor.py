@@ -169,6 +169,34 @@ class PredictivePartition:
             mapping.append((targets_for_bits[0], targets_for_bits[1]))
         return tuple(mapping)
 
+    def same_horizon_transition_relation(
+        self,
+    ) -> tuple[tuple[frozenset[int], frozenset[int]], ...]:
+        """Return the finite same-horizon set-valued transition relation.
+
+        The returned tuple is indexed as
+        ``relation[source_class_id][boundary_bit]``. Each target is a
+        ``frozenset`` of class IDs reached by applying that boundary bit to
+        every encoded state in the source class. A target set can contain
+        multiple classes: finite predictive classes need not have a
+        deterministic same-horizon transition. This is a bounded relation,
+        not an infinite-horizon quotient or a deterministic automaton.
+        """
+
+        relation: list[tuple[frozenset[int], frozenset[int]]] = []
+        for members in self.classes:
+            targets_for_bits = tuple(
+                frozenset(
+                    self.class_id(
+                        integer_successor(state, boundary_bit, self.horizon)
+                    )
+                    for state in members
+                )
+                for boundary_bit in (0, 1)
+            )
+            relation.append((targets_for_bits[0], targets_for_bits[1]))
+        return tuple(relation)
+
     def right_truncation_fibers(
         self, lower: PredictivePartition
     ) -> tuple[tuple[int, ...], ...]:

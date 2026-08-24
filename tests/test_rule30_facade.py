@@ -91,6 +91,18 @@ class Rule30FacadeTests(unittest.TestCase):
                     lower.class_id(next_state & 0b111),
                 )
 
+    def test_facade_exposes_finite_same_horizon_transition_relation(self) -> None:
+        partition = rule30.predictive_partition(4)
+        relation = partition.same_horizon_transition_relation()
+
+        self.assertEqual(
+            relation,
+            rule30_successor.predictive_partition(
+                4
+            ).same_horizon_transition_relation(),
+        )
+        self.assertEqual(relation[1][0], frozenset({3, 5}))
+
     def test_facade_exposes_finite_class_trace(self) -> None:
         package_partition = rule30.predictive_partition(3)
         implementation_partition = rule30_successor.predictive_partition(3)

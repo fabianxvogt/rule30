@@ -332,6 +332,60 @@ class IntegerSuccessorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             partition.nested_transition_map(predictive_partition(1))
 
+    def test_same_horizon_transition_relation_is_exhaustive_and_set_valued(
+        self,
+    ) -> None:
+        expected_nondeterministic_pairs = (0, 0, 1, 2, 3, 8, 8)
+
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            relation = partition.same_horizon_transition_relation()
+            nondeterministic_pairs = 0
+
+            self.assertEqual(len(relation), len(partition.classes))
+            for class_id, members in enumerate(partition.classes):
+                for boundary_bit in (0, 1):
+                    targets = relation[class_id][boundary_bit]
+                    if len(targets) > 1:
+                        nondeterministic_pairs += 1
+                    with self.subTest(
+                        horizon=horizon,
+                        class_id=class_id,
+                        boundary_bit=boundary_bit,
+                    ):
+                        self.assertIsInstance(targets, frozenset)
+                        self.assertTrue(targets)
+                        expected = frozenset(
+                            partition.class_id(
+                                tuple_successor(
+                                    state, boundary_bit, horizon
+                                )
+                            )
+                            for state in members
+                        )
+                        self.assertEqual(targets, expected)
+
+            self.assertEqual(
+                nondeterministic_pairs,
+                expected_nondeterministic_pairs[horizon],
+            )
+
+            for state in range(1 << horizon):
+                source_class_id = partition.class_id(state)
+                for boundary_bit in (0, 1):
+                    with self.subTest(
+                        horizon=horizon,
+                        state=state,
+                        boundary_bit=boundary_bit,
+                    ):
+                        next_class_id = partition.class_id(
+                            tuple_successor(state, boundary_bit, horizon)
+                        )
+                        self.assertIn(
+                            next_class_id,
+                            relation[source_class_id][boundary_bit],
+                        )
+
     def test_right_truncation_fibers_match_map_and_member_projection(self) -> None:
         for horizon in range(1, 7):
             higher = predictive_partition(horizon)

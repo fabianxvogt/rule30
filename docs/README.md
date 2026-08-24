@@ -35,9 +35,13 @@ and source-class fibers for the same finite partitions, with class-ID and
 adjacent-horizon validation. `nested_transition_map` provides the separately
 checked boundary-driven map from `S_h` to `S_{h-1}` after one update and right
 truncation; it does not assert same-horizon determinism or an infinite
-quotient. `PredictivePartition.class_trace` records one finite class ID before
-each supplied boundary-driven update, so `set(partition.class_trace(...))` is a
-bounded coverage calculation only. The partition builder uses a finite
+quotient. `same_horizon_transition_relation` provides the missing finite
+set-valued same-horizon relation, preserving the observed nondeterminism rather
+than presenting a false transition function. `PredictivePartition.class_trace`
+records one finite class ID before each supplied boundary-driven update, so
+`set(partition.class_trace(...))` is a bounded coverage calculation only. The
+[same-horizon relation report](agent-wave-2026-08-25-same-horizon-relation.md)
+records its bounded evidence and limits. The partition builder uses a finite
 recursive lower-horizon key while
 still enumerating every bounded state; it remains an exponential small-check
 tool, not an infinite-horizon construction.

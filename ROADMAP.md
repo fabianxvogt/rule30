@@ -14,8 +14,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 
 - Promote the remaining predictive-state quotient machinery (`predictive_state_growth.py`,
   `right_half_response_classes.py`, `fast_class_coverage2.py`) beyond the bounded transition,
-  partition, and cross-horizon truncation facade into a small, documented, tested package with
-  a clean API instead of standalone scripts.
+  partition, cross-horizon truncation, and same-horizon set-valued relation facade into a small,
+  documented, tested package with a clean API instead of standalone scripts.
 - Push class coverage / quotient computations beyond h = 22 (needs longer generated columns;
   C generator makes ~10^8 bits feasible).
 - Write up the negative results properly: the vacuity of coverage-based counting bounds after
@@ -65,3 +65,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: added the finite boundary-driven nested transition map from `S_h` to `S_{h-1}`, exhaustively checked for both boundary bits through h = 6; no same-horizon or infinite-horizon transition claim. [EMPIRICAL implementation check]
 - 2026-08-25: moved the recursive finite predictive-partition construction into the reusable API, with exhaustive state coverage and the known class-count table reproduced through h = 11; no infinite-horizon quotient claim. [EMPIRICAL implementation check]
 - 2026-08-25: added a finite `PredictivePartition.class_trace` helper for reproducible class-coverage traces from bounded boundary words, exhaustively checked through h = 6 and word lengths 0..4; no eventual-coverage or infinite-horizon claim. [EMPIRICAL implementation check]
+- 2026-08-25: added the finite same-horizon set-valued transition relation, exhaustively checked for every state and boundary bit through h = 6; preserves observed class nondeterminism and makes no infinite-horizon or deterministic-automaton claim. [EMPIRICAL implementation check]
