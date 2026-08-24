@@ -49,6 +49,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - Center column uniquely determines right half-plane (Prop 9); gap is memory, not information.
   [FORMAL]
 - Full class coverage verified for h ≤ 22. [EMPIRICAL]
-- Proposition 13 retracted with concrete counterexamples; error fully characterized. 
+- Proposition 13 retracted with concrete counterexamples; error fully characterized.
 - Periodicity sweeps: no periods ≤ 2048 on 1M bits (raw, xor-shift, running-parity); no fixed
   column ±1…±19 with period ≤ 500. [EMPIRICAL]
+
+- 2026-08-22: added `experiments/bitwise_successor_check.py`; exhaustive finite-width validation passed for h=0..12 (8,191 encodings and 16,382 transitions). [EMPIRICAL implementation check]
