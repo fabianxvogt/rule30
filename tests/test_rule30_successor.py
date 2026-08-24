@@ -5,7 +5,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from experiments.rule30_successor import integer_successor
+from experiments.rule30_successor import evolve_integer_state, integer_successor
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +31,16 @@ class IntegerSuccessorTests(unittest.TestCase):
         self.assertEqual(integer_successor(0b101, 0, 3), 0b101)
         self.assertEqual(integer_successor(0b101, 1, 3), 0b100)
 
+    def test_empty_boundary_word_preserves_state(self) -> None:
+        self.assertEqual(evolve_integer_state(0b101, (), 3), 0b101)
+
+    def test_evolution_delegates_to_successive_successors(self) -> None:
+        boundary_bits = (1, 0, 1, 1)
+        expected = 0b0101
+        for boundary_bit in boundary_bits:
+            expected = integer_successor(expected, boundary_bit, 4)
+        self.assertEqual(evolve_integer_state(0b0101, boundary_bits, 4), expected)
+
     def test_matches_tuple_reference_through_bounded_width(self) -> None:
         for horizon in range(9):
             for state in range(1 << horizon):
@@ -42,6 +52,29 @@ class IntegerSuccessorTests(unittest.TestCase):
                             integer_successor(state, boundary_bit, horizon),
                             tuple_successor(state, boundary_bit, horizon),
                         )
+
+    def test_evolution_matches_tuple_reference_for_bounded_words(self) -> None:
+        for horizon in range(7):
+            for state in range(1 << horizon):
+                for word_length in range(5):
+                    for boundary_word in range(1 << word_length):
+                        boundary_bits = tuple(
+                            (boundary_word >> i) & 1 for i in range(word_length)
+                        )
+                        expected = state
+                        for boundary_bit in boundary_bits:
+                            expected = tuple_successor(
+                                expected, boundary_bit, horizon
+                            )
+                        with self.subTest(
+                            horizon=horizon,
+                            state=state,
+                            boundary_bits=boundary_bits,
+                        ):
+                            self.assertEqual(
+                                evolve_integer_state(state, boundary_bits, horizon),
+                                expected,
+                            )
 
     def test_checker_cli_output_remains_stable(self) -> None:
         completed = subprocess.run(

@@ -11,7 +11,9 @@ small boundary preserves the checker’s existing behavior for valid inputs.
 
 from __future__ import annotations
 
-__all__ = ["integer_successor"]
+from collections.abc import Iterable
+
+__all__ = ["evolve_integer_state", "integer_successor"]
 
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
@@ -21,3 +23,19 @@ def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
     left = ((state << 1) | boundary_bit) & mask
     right = state | (state >> 1)
     return (left ^ right) & mask
+
+
+def evolve_integer_state(
+    state: int, boundary_bits: Iterable[int], horizon: int
+) -> int:
+    """Apply successive boundary bits and return the final encoded state.
+
+    ``boundary_bits`` is consumed once from left to right.  An empty iterable
+    leaves a valid encoded state unchanged.  As with ``integer_successor``,
+    callers provide a non-negative horizon, a width-limited state, and binary
+    boundary values; this helper intentionally keeps the API validation-free.
+    """
+
+    for boundary_bit in boundary_bits:
+        state = integer_successor(state, boundary_bit, horizon)
+    return state
