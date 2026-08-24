@@ -3,6 +3,7 @@ from __future__ import annotations
 import subprocess
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 from experiments.rule30_successor import (
@@ -174,6 +175,43 @@ class IntegerSuccessorTests(unittest.TestCase):
                     with self.subTest(horizon=horizon, left=left, right=right):
                         same_class = partition.class_id(left) == partition.class_id(right)
                         self.assertEqual(same_class, signatures[left] == signatures[right])
+
+    def test_right_truncation_map_is_exhaustively_well_defined(self) -> None:
+        expected_fiber_distributions = (
+            {2: 1},
+            {1: 1, 2: 1},
+            {1: 1, 2: 2},
+            {1: 3, 2: 2},
+            {1: 3, 2: 4},
+            {1: 6, 2: 5},
+        )
+
+        for horizon in range(1, 7):
+            higher = predictive_partition(horizon)
+            lower = predictive_partition(horizon - 1)
+            mapping = higher.right_truncation_map(lower)
+            mask = (1 << (horizon - 1)) - 1
+
+            self.assertEqual(len(mapping), len(higher.classes))
+            for state in range(1 << horizon):
+                with self.subTest(horizon=horizon, state=state):
+                    self.assertEqual(
+                        mapping[higher.class_id(state)],
+                        lower.class_id(state & mask),
+                    )
+
+            fiber_sizes = Counter(Counter(mapping).values())
+            self.assertEqual(
+                dict(sorted(fiber_sizes.items())),
+                expected_fiber_distributions[horizon - 1],
+            )
+
+    def test_right_truncation_map_requires_adjacent_horizons(self) -> None:
+        partition = predictive_partition(3)
+        with self.assertRaises(ValueError):
+            partition.right_truncation_map(predictive_partition(3))
+        with self.assertRaises(ValueError):
+            partition.right_truncation_map(predictive_partition(1))
 
     def test_predictive_partition_rejects_invalid_horizons_and_states(self) -> None:
         with self.assertRaises(ValueError):

@@ -13,9 +13,9 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 ## Next
 
 - Promote the remaining predictive-state quotient machinery (`predictive_state_growth.py`,
-  `right_half_response_classes.py`, `fast_class_coverage2.py`) beyond the bounded transition
-  and partition facade into a small, documented, tested package with a clean API instead of
-  standalone scripts.
+  `right_half_response_classes.py`, `fast_class_coverage2.py`) beyond the bounded transition,
+  partition, and cross-horizon truncation facade into a small, documented, tested package with
+  a clean API instead of standalone scripts.
 - Push class coverage / quotient computations beyond h = 22 (needs longer generated columns;
   C generator makes ~10^8 bits feasible).
 - Write up the negative results properly: the vacuity of coverage-based counting bounds after
@@ -60,3 +60,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: added an integer response-trace API and finite quotient-partition regression through h = 6. [EMPIRICAL implementation check]
 - 2026-08-25: added a deterministic finite-horizon predictive partition API built from response signatures, with exhaustive regression through h = 6. [EMPIRICAL implementation check]
 - 2026-08-25: added the repository-local `rule30` facade for the bounded transition and predictive-partition helpers; existing experiment imports remain supported. [EMPIRICAL integration check]
+- 2026-08-25: added a finite cross-horizon right-truncation map on predictive partitions, exhaustively checked through h = 6; no infinite-horizon quotient claim. [EMPIRICAL implementation check]

@@ -50,6 +50,41 @@ class PredictivePartition:
             )
         return self._state_to_class[state]
 
+    def right_truncation_map(
+        self, lower: PredictivePartition
+    ) -> tuple[int, ...]:
+        """Return the finite quotient map induced by dropping the rightmost bit.
+
+        The returned tuple is indexed by this partition's class IDs; entry
+        ``mapping[class_id]`` is the class ID in ``lower`` of the state with
+        its highest encoded bit removed. ``lower`` must be the partition at
+        exactly one smaller horizon. The map is computed exhaustively over
+        class members and therefore checks the finite well-definedness claim
+        instead of assuming it.
+
+        This is a bounded cross-horizon map. It does not define an
+        infinite-horizon quotient or a same-horizon transition function.
+        """
+
+        expected_horizon = self.horizon - 1
+        if lower.horizon != expected_horizon:
+            raise ValueError(
+                "lower partition must have horizon "
+                f"{expected_horizon}; got {lower.horizon}"
+            )
+
+        mask = (1 << lower.horizon) - 1
+        mapping: list[int] = []
+        for class_id, members in enumerate(self.classes):
+            targets = {lower.class_id(state & mask) for state in members}
+            if len(targets) != 1:
+                raise ValueError(
+                    "right truncation is not well-defined for finite class "
+                    f"{class_id} at horizon {self.horizon}"
+                )
+            mapping.append(targets.pop())
+        return tuple(mapping)
+
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
     """Return the width-``horizon`` Rule 30 successor of an encoded state."""

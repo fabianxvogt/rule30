@@ -43,6 +43,22 @@ class Rule30FacadeTests(unittest.TestCase):
             rule30_successor.response_signature(0b0101, 4),
         )
 
+    def test_facade_exposes_bounded_cross_horizon_projection(self) -> None:
+        higher = rule30.predictive_partition(4)
+        lower = rule30.predictive_partition(3)
+
+        mapping = higher.right_truncation_map(lower)
+
+        self.assertEqual(
+            mapping[higher.class_id(0b1010)], lower.class_id(0b0010)
+        )
+        self.assertEqual(
+            mapping,
+            rule30_successor.predictive_partition(4).right_truncation_map(
+                rule30_successor.predictive_partition(3)
+            ),
+        )
+
     def test_existing_experiment_import_remains_usable(self) -> None:
         self.assertEqual(
             rule30_successor.integer_successor(0b101, 1, 3),

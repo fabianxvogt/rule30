@@ -27,4 +27,6 @@ from rule30 import predictive_partition, response_signature
 
 See [`agent-wave-2026-08-25-package-facade.md`](agent-wave-2026-08-25-package-facade.md)
 for the compatibility checks and explicit finite-horizon limits. The facade
-does not include the exploratory scripts or generated results.
+does not include the exploratory scripts or generated results. The
+`PredictivePartition.right_truncation_map` method exposes the adjacent-horizon
+projection described in the [cross-horizon report](agent-wave-2026-08-25-cross-horizon-map.md).
