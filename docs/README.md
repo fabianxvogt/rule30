@@ -40,6 +40,13 @@ set-valued same-horizon relation, preserving the observed nondeterminism rather
 than presenting a false transition function. `PredictivePartition.class_trace`
 records one finite class ID before each supplied boundary-driven update, so
 `set(partition.class_trace(...))` is a bounded coverage calculation only. The
+`PredictivePartition.coverage_profile(state, boundary_bits)` method, or the
+equivalent `rule30.coverage_profile(partition, state, boundary_bits)` function,
+returns class-ID-indexed first-visit steps for the initial state and each state
+after a supplied boundary bit. It is a finite profile of the supplied word;
+it does not generate or load center-column data and makes no eventual-coverage
+or infinite-horizon claim. The [coverage-profile report](agent-wave-2026-08-25-coverage-profile.md)
+records its bounded evidence and limits. The
 [same-horizon relation report](agent-wave-2026-08-25-same-horizon-relation.md)
 records its bounded evidence and limits. The partition builder uses a finite
 recursive lower-horizon key while

@@ -16,6 +16,7 @@ from dataclasses import dataclass
 
 __all__ = [
     "PredictivePartition",
+    "coverage_profile",
     "evolve_integer_state",
     "integer_successor",
     "predictive_partition",
@@ -88,6 +89,35 @@ class PredictivePartition:
             trace.append(self.class_id(state))
             state = integer_successor(state, boundary_bit, self.horizon)
         return tuple(trace)
+
+    def coverage_profile(
+        self, state: int, boundary_bits: Iterable[int]
+    ) -> tuple[int | None, ...]:
+        """Return first finite visit steps for every quotient class.
+
+        The returned tuple is indexed by class ID.  Entry ``class_id`` is the
+        first step at which that class is observed, or ``None`` if the class
+        is not observed.  Step 0 is the supplied initial state; each supplied
+        boundary bit then advances the state once and observes the resulting
+        state at the next step.  An empty boundary word therefore records only
+        the initial state.  This is a finite coverage profile for the supplied
+        word, not a claim about a center-column trajectory, eventual coverage,
+        or an infinite-horizon quotient.
+        """
+
+        self.class_id(state)
+        first_visit: list[int | None] = [None] * len(self.classes)
+
+        def record(step: int, current_state: int) -> None:
+            class_id = self.class_id(current_state)
+            if first_visit[class_id] is None:
+                first_visit[class_id] = step
+
+        record(0, state)
+        for step, boundary_bit in enumerate(boundary_bits, start=1):
+            state = integer_successor(state, boundary_bit, self.horizon)
+            record(step, state)
+        return tuple(first_visit)
 
     def right_truncation_map(
         self, lower: PredictivePartition
@@ -257,6 +287,20 @@ def response_trace(
         output.append(state & 1)
         state = integer_successor(state, boundary_bit, horizon)
     return tuple(output)
+
+
+def coverage_profile(
+    partition: PredictivePartition,
+    state: int,
+    boundary_bits: Iterable[int],
+) -> tuple[int | None, ...]:
+    """Return a finite class-coverage profile using ``partition``.
+
+    This functional form mirrors :meth:`PredictivePartition.coverage_profile`
+    for callers that keep the partition separate from the trajectory inputs.
+    """
+
+    return partition.coverage_profile(state, boundary_bits)
 
 
 def _boundary_words(horizon: int) -> tuple[tuple[int, ...], ...]:

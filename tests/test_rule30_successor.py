@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 from experiments.rule30_successor import (
+    coverage_profile,
     evolve_integer_state,
     integer_successor,
     predictive_partition,
@@ -117,6 +118,78 @@ class IntegerSuccessorTests(unittest.TestCase):
         self.assertEqual(consumed, [1, 0, 1])
         with self.assertRaises(ValueError):
             partition.class_trace(0b1000, ())
+
+    def test_coverage_profile_matches_exhaustive_finite_trajectory_reference(
+        self,
+    ) -> None:
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            for state in range(1 << horizon):
+                for word_length in range(5):
+                    for boundary_word in range(1 << word_length):
+                        boundary_bits = tuple(
+                            (boundary_word >> i) & 1 for i in range(word_length)
+                        )
+                        expected: list[int | None] = [
+                            None
+                        ] * len(partition.classes)
+                        current_state = state
+                        for step in range(word_length + 1):
+                            class_id = partition.class_id(current_state)
+                            if expected[class_id] is None:
+                                expected[class_id] = step
+                            if step < word_length:
+                                current_state = tuple_successor(
+                                    current_state, boundary_bits[step], horizon
+                                )
+                        with self.subTest(
+                            horizon=horizon,
+                            state=state,
+                            boundary_bits=boundary_bits,
+                        ):
+                            self.assertEqual(
+                                partition.coverage_profile(state, boundary_bits),
+                                tuple(expected),
+                            )
+                            self.assertEqual(
+                                coverage_profile(
+                                    partition, state, boundary_bits
+                                ),
+                                tuple(expected),
+                            )
+
+    def test_coverage_profile_includes_initial_state_and_consumes_once(self) -> None:
+        partition = predictive_partition(3)
+        consumed = []
+
+        def boundary_bits():
+            for bit in (1, 0, 1):
+                consumed.append(bit)
+                yield bit
+
+        profile = partition.coverage_profile(0b001, boundary_bits())
+        expected = [None] * len(partition.classes)
+        state = 0b001
+        for step, boundary_bit in enumerate((None, 1, 0, 1)):
+            if boundary_bit is not None:
+                state = tuple_successor(state, boundary_bit, 3)
+            class_id = partition.class_id(state)
+            if expected[class_id] is None:
+                expected[class_id] = step
+        self.assertEqual(profile, tuple(expected))
+        self.assertEqual(consumed, [1, 0, 1])
+
+        empty_profile = partition.coverage_profile(0b001, ())
+        self.assertEqual(
+            empty_profile[partition.class_id(0b001)],
+            0,
+        )
+        self.assertEqual(
+            sum(step is not None for step in empty_profile),
+            1,
+        )
+        with self.assertRaises(ValueError):
+            partition.coverage_profile(0b1000, ())
 
     def test_matches_tuple_reference_through_bounded_width(self) -> None:
         for horizon in range(9):

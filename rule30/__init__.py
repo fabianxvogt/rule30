@@ -8,6 +8,7 @@ larger experiment collection.
 
 from experiments.rule30_successor import (
     PredictivePartition,
+    coverage_profile,
     evolve_integer_state,
     integer_successor,
     predictive_partition,
@@ -17,6 +18,7 @@ from experiments.rule30_successor import (
 
 __all__ = [
     "PredictivePartition",
+    "coverage_profile",
     "evolve_integer_state",
     "integer_successor",
     "predictive_partition",

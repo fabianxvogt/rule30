@@ -193,6 +193,12 @@ boundary_bits)` returns the finite class ID observed before each supplied
 update; the empty boundary word returns an empty trace. Taking
 `set(partition.class_trace(...))` gives the classes visited during that finite
 trace, but this does not make a claim about eventual or infinite coverage.
+`PredictivePartition.coverage_profile(state, boundary_bits)` (also available as
+`rule30.coverage_profile(partition, state, boundary_bits)`) returns a tuple
+indexed by finite class ID whose values are first-visit steps, with `None` for
+classes not seen. It includes the initial state and the state after each
+supplied boundary bit; it is a bounded profile for that supplied word, not a
+center-column, eventual-coverage, or infinite-horizon claim.
 
 ## Curated experiment index
 

@@ -12,6 +12,7 @@ class Rule30FacadeTests(unittest.TestCase):
             rule30.__all__,
             [
                 "PredictivePartition",
+                "coverage_profile",
                 "evolve_integer_state",
                 "integer_successor",
                 "predictive_partition",
@@ -111,6 +112,19 @@ class Rule30FacadeTests(unittest.TestCase):
         self.assertEqual(
             package_partition.class_trace(0b001, bits),
             implementation_partition.class_trace(0b001, bits),
+        )
+
+    def test_facade_exposes_finite_coverage_profile(self) -> None:
+        partition = rule30.predictive_partition(3)
+        bits = (1, 0, 1)
+
+        self.assertEqual(
+            rule30.coverage_profile(partition, 0b001, bits),
+            partition.coverage_profile(0b001, bits),
+        )
+        self.assertIs(
+            rule30.coverage_profile,
+            rule30_successor.coverage_profile,
         )
 
     def test_existing_experiment_import_remains_usable(self) -> None:
