@@ -54,3 +54,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   column ±1…±19 with period ≤ 500. [EMPIRICAL]
 
 - 2026-08-22: added `experiments/bitwise_successor_check.py`; exhaustive finite-width validation passed for h=0..12 (8,191 encodings and 16,382 transitions). [EMPIRICAL implementation check]
+- 2026-08-24: extended the integer-successor validation through h=13 (16,383 encodings and 32,766 transitions), with a bounded `--max-horizon` CLI option. [EMPIRICAL implementation check]

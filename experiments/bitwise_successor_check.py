@@ -15,9 +15,11 @@ with the result masked to width h.
 
 from __future__ import annotations
 
+import argparse
+
 from fast_class_coverage2 import rule30_next_tuple
 
-MAX_HORIZON = 12
+DEFAULT_MAX_HORIZON = 12
 
 
 def decode_state(state: int, horizon: int) -> tuple[int, ...]:
@@ -35,9 +37,9 @@ def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
         return (left ^ right) & mask
 
 
-def main() -> None:
+def main(max_horizon: int = DEFAULT_MAX_HORIZON) -> None:
         roundtrips = transitions = 0
-        for horizon in range(MAX_HORIZON + 1):
+        for horizon in range(max_horizon + 1):
                 for state in range(1 << horizon):
                         decoded = decode_state(state, horizon)
                         if encode_state(decoded) != state:
@@ -54,9 +56,19 @@ def main() -> None:
                                         )
                                 transitions += 1
         print(
-                f"PASS: h=0..{MAX_HORIZON}, {roundtrips} state encodings and {transitions} boundary transitions checked"
+                f"PASS: h=0..{max_horizon}, {roundtrips} state encodings and {transitions} boundary transitions checked"
         )
 
 
 if __name__ == "__main__":
-        main()
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument(
+                "--max-horizon",
+                type=int,
+                default=DEFAULT_MAX_HORIZON,
+                help=f"highest width to check (default: {DEFAULT_MAX_HORIZON})",
+        )
+        args = parser.parse_args()
+        if args.max_horizon < 0:
+                parser.error("--max-horizon must be non-negative")
+        main(args.max_horizon)
