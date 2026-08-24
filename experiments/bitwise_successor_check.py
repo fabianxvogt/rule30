@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 
 from fast_class_coverage2 import rule30_next_tuple
+from rule30_successor import integer_successor
 
 DEFAULT_MAX_HORIZON = 12
 
@@ -28,13 +29,6 @@ def decode_state(state: int, horizon: int) -> tuple[int, ...]:
 
 def encode_state(state: tuple[int, ...]) -> int:
         return sum(bit << i for i, bit in enumerate(state))
-
-
-def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
-        mask = (1 << horizon) - 1
-        left = ((state << 1) | boundary_bit) & mask
-        right = state | (state >> 1)
-        return (left ^ right) & mask
 
 
 def main(max_horizon: int = DEFAULT_MAX_HORIZON) -> None:
