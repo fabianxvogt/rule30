@@ -156,6 +156,24 @@ python3 experiments/predictive_state_growth.py            # |S_h| through h≈21
 python3 experiments/fast_class_coverage2.py               # full coverage census, h ≤ 22
 ```
 
+## Bounded Python API
+
+The repository-local `rule30` package exposes the small, finite-width
+transition and predictive-partition surface without changing the existing
+experiment modules:
+
+```python
+from rule30 import predictive_partition, response_signature
+
+partition = predictive_partition(6)
+signature = response_signature(0b010101, 6)
+```
+
+The facade also exports `integer_successor`, `evolve_integer_state`,
+`response_trace`, and `PredictivePartition`. `predictive_partition` exhaustively
+enumerates width-`horizon` states and is intended for small bounded checks; it
+does not assert an infinite-horizon quotient or any theorem about Rule 30.
+
 ## Curated experiment index
 
 Highlights (see `experiments/` for the full set of ~117 scripts):
