@@ -57,3 +57,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-24: extended the integer-successor validation through h=13 (16,383 encodings and 32,766 transitions), with a bounded `--max-horizon` CLI option. [EMPIRICAL implementation check]
 - 2026-08-25: added a dependency-free multi-step integer evolution helper, with bounded regression coverage against the tuple reference. [EMPIRICAL implementation check]
 - 2026-08-25: added an integer response-trace API and finite quotient-partition regression through h = 6. [EMPIRICAL implementation check]
+- 2026-08-25: added a deterministic finite-horizon predictive partition API built from response signatures, with exhaustive regression through h = 6. [EMPIRICAL implementation check]

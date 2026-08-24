@@ -8,6 +8,8 @@ from pathlib import Path
 from experiments.rule30_successor import (
     evolve_integer_state,
     integer_successor,
+    predictive_partition,
+    response_signature,
     response_trace,
 )
 
@@ -138,6 +140,50 @@ class IntegerSuccessorTests(unittest.TestCase):
                 self.assertEqual(
                     len(integer_signatures), expected_class_counts[horizon]
                 )
+
+    def test_predictive_partition_matches_response_signatures(self) -> None:
+        expected_class_counts = (1, 2, 3, 5, 7, 11, 16)
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            members = [
+                state for class_members in partition.classes for state in class_members
+            ]
+            with self.subTest(horizon=horizon):
+                self.assertEqual(partition.horizon, horizon)
+                self.assertEqual(len(partition.classes), expected_class_counts[horizon])
+                self.assertEqual(sorted(members), list(range(1 << horizon)))
+                self.assertEqual(len(members), len(set(members)))
+                self.assertEqual(
+                    [partition.class_id(state) for state in members],
+                    [
+                        class_id
+                        for class_id, class_members in enumerate(partition.classes)
+                        for _ in class_members
+                    ],
+                )
+
+    def test_predictive_partition_is_exact_for_finite_signatures(self) -> None:
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            signatures = {
+                state: response_signature(state, horizon)
+                for state in range(1 << horizon)
+            }
+            for left in range(1 << horizon):
+                for right in range(1 << horizon):
+                    with self.subTest(horizon=horizon, left=left, right=right):
+                        same_class = partition.class_id(left) == partition.class_id(right)
+                        self.assertEqual(same_class, signatures[left] == signatures[right])
+
+    def test_predictive_partition_rejects_invalid_horizons_and_states(self) -> None:
+        with self.assertRaises(ValueError):
+            predictive_partition(-1)
+        with self.assertRaises(ValueError):
+            response_signature(0, -1)
+        with self.assertRaises(ValueError):
+            response_signature(4, 2)
+        with self.assertRaises(ValueError):
+            predictive_partition(2).class_id(4)
 
     @staticmethod
     def _tuple_states(

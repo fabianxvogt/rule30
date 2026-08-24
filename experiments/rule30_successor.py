@@ -12,8 +12,43 @@ small boundary preserves the checker’s existing behavior for valid inputs.
 from __future__ import annotations
 
 from collections.abc import Iterable
+from dataclasses import dataclass
 
-__all__ = ["evolve_integer_state", "integer_successor", "response_trace"]
+__all__ = [
+    "PredictivePartition",
+    "evolve_integer_state",
+    "integer_successor",
+    "predictive_partition",
+    "response_signature",
+    "response_trace",
+]
+
+
+ResponseSignature = tuple[tuple[int, ...], ...]
+
+
+@dataclass(frozen=True)
+class PredictivePartition:
+    """Finite-horizon response-equivalence classes for encoded states.
+
+    ``classes`` is ordered by the first state encountered while scanning
+    ``0 .. 2**horizon - 1``.  The ordering is deterministic but has no
+    mathematical meaning.  ``class_id`` provides the inverse lookup for a
+    valid encoded state.
+    """
+
+    horizon: int
+    classes: tuple[tuple[int, ...], ...]
+    _state_to_class: tuple[int, ...]
+
+    def class_id(self, state: int) -> int:
+        """Return the finite-horizon quotient class containing ``state``."""
+
+        if not 0 <= state < (1 << self.horizon):
+            raise ValueError(
+                f"state must be in [0, {1 << self.horizon}); got {state}"
+            )
+        return self._state_to_class[state]
 
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
@@ -57,3 +92,59 @@ def response_trace(
         output.append(state & 1)
         state = integer_successor(state, boundary_bit, horizon)
     return tuple(output)
+
+
+def _boundary_words(horizon: int) -> tuple[tuple[int, ...], ...]:
+    """Enumerate all length-``horizon`` boundary words in integer order."""
+
+    return tuple(
+        tuple((word >> index) & 1 for index in range(horizon))
+        for word in range(1 << horizon)
+    )
+
+
+def response_signature(state: int, horizon: int) -> ResponseSignature:
+    """Return the finite response signature of ``state``.
+
+    The signature concatenates the traces for every binary boundary word of
+    length ``horizon``.  Two states are equivalent for this finite experiment
+    exactly when their signatures are equal.  This is a finite observation
+    criterion, not an infinite-horizon quotient.
+    """
+
+    if horizon < 0:
+        raise ValueError(f"horizon must be non-negative; got {horizon}")
+    if not 0 <= state < (1 << horizon):
+        raise ValueError(
+            f"state must be in [0, {1 << horizon}); got {state}"
+        )
+    return tuple(
+        response_trace(state, boundary_bits, horizon)
+        for boundary_bits in _boundary_words(horizon)
+    )
+
+
+def predictive_partition(horizon: int) -> PredictivePartition:
+    """Build the bounded response-equivalence partition at ``horizon``.
+
+    Every encoded width-``horizon`` state is included.  The implementation is
+    intentionally exhaustive and therefore exponential in ``horizon``; it is
+    suitable for small finite checks, not an unbounded production algorithm.
+    """
+
+    if horizon < 0:
+        raise ValueError(f"horizon must be non-negative; got {horizon}")
+
+    classes_by_signature: dict[ResponseSignature, list[int]] = {}
+    for state in range(1 << horizon):
+        signature = response_signature(state, horizon)
+        classes_by_signature.setdefault(signature, []).append(state)
+
+    classes = tuple(
+        tuple(members) for members in classes_by_signature.values()
+    )
+    state_to_class = [0] * (1 << horizon)
+    for class_id, members in enumerate(classes):
+        for state in members:
+            state_to_class[state] = class_id
+    return PredictivePartition(horizon, classes, tuple(state_to_class))
