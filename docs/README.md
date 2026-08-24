@@ -32,4 +32,7 @@ does not include the exploratory scripts or generated results. The
 projection described in the [cross-horizon report](agent-wave-2026-08-25-cross-horizon-map.md).
 `class_members` and `right_truncation_fibers` provide immutable class members
 and source-class fibers for the same finite partitions, with class-ID and
-adjacent-horizon validation.
+adjacent-horizon validation. `nested_transition_map` provides the separately
+checked boundary-driven map from `S_h` to `S_{h-1}` after one update and right
+truncation; it does not assert same-horizon determinism or an infinite
+quotient.

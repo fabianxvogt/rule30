@@ -230,6 +230,37 @@ class IntegerSuccessorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             partition.right_truncation_map(predictive_partition(1))
 
+    def test_nested_transition_map_is_exhaustively_well_defined(self) -> None:
+        for horizon in range(1, 7):
+            higher = predictive_partition(horizon)
+            lower = predictive_partition(horizon - 1)
+            mapping = higher.nested_transition_map(lower)
+            mask = (1 << (horizon - 1)) - 1
+
+            self.assertEqual(len(mapping), len(higher.classes))
+            for state in range(1 << horizon):
+                source_class_id = higher.class_id(state)
+                for boundary_bit in (0, 1):
+                    next_state = tuple_successor(
+                        state, boundary_bit, horizon
+                    )
+                    with self.subTest(
+                        horizon=horizon,
+                        state=state,
+                        boundary_bit=boundary_bit,
+                    ):
+                        self.assertEqual(
+                            mapping[source_class_id][boundary_bit],
+                            lower.class_id(next_state & mask),
+                        )
+
+    def test_nested_transition_map_rejects_non_adjacent_horizons(self) -> None:
+        partition = predictive_partition(3)
+        with self.assertRaises(ValueError):
+            partition.nested_transition_map(predictive_partition(3))
+        with self.assertRaises(ValueError):
+            partition.nested_transition_map(predictive_partition(1))
+
     def test_right_truncation_fibers_match_map_and_member_projection(self) -> None:
         for horizon in range(1, 7):
             higher = predictive_partition(horizon)

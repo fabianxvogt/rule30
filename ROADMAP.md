@@ -62,3 +62,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: added the repository-local `rule30` facade for the bounded transition and predictive-partition helpers; existing experiment imports remain supported. [EMPIRICAL integration check]
 - 2026-08-25: added a finite cross-horizon right-truncation map on predictive partitions, exhaustively checked through h = 6; no infinite-horizon quotient claim. [EMPIRICAL implementation check]
 - 2026-08-25: added validated finite class-member and right-truncation-fiber introspection, exhaustively checked through h = 6; no infinite-horizon quotient claim. [EMPIRICAL implementation check]
+- 2026-08-25: added the finite boundary-driven nested transition map from `S_h` to `S_{h-1}`, exhaustively checked for both boundary bits through h = 6; no same-horizon or infinite-horizon transition claim. [EMPIRICAL implementation check]

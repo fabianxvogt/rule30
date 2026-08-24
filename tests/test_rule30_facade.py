@@ -74,6 +74,23 @@ class Rule30FacadeTests(unittest.TestCase):
             for source_class_id in source_class_ids:
                 self.assertEqual(mapping[source_class_id], lower_class_id)
 
+    def test_facade_exposes_finite_nested_transition_map(self) -> None:
+        higher = rule30.predictive_partition(4)
+        lower = rule30.predictive_partition(3)
+
+        mapping = higher.nested_transition_map(lower)
+
+        for state in range(1 << higher.horizon):
+            source_class_id = higher.class_id(state)
+            for boundary_bit in (0, 1):
+                next_state = rule30.integer_successor(
+                    state, boundary_bit, higher.horizon
+                )
+                self.assertEqual(
+                    mapping[source_class_id][boundary_bit],
+                    lower.class_id(next_state & 0b111),
+                )
+
     def test_existing_experiment_import_remains_usable(self) -> None:
         self.assertEqual(
             rule30_successor.integer_successor(0b101, 1, 3),

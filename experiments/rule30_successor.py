@@ -105,6 +105,51 @@ class PredictivePartition:
             mapping.append(targets.pop())
         return tuple(mapping)
 
+    def nested_transition_map(
+        self, lower: PredictivePartition
+    ) -> tuple[tuple[int, int], ...]:
+        """Return the finite boundary-driven map from this partition to ``lower``.
+
+        For each source class and boundary bit, apply one width-``horizon``
+        Rule 30 update, drop the highest encoded bit, and classify the result
+        in the adjacent lower partition.  The returned tuple is indexed as
+        ``mapping[source_class_id][boundary_bit]``.
+
+        Every source-class member is checked to ensure that each boundary bit
+        has one lower-horizon target.  This is a finite nested-transition
+        check; it does not define a same-horizon transition or an
+        infinite-horizon quotient.
+        """
+
+        expected_horizon = self.horizon - 1
+        if lower.horizon != expected_horizon:
+            raise ValueError(
+                "lower partition must have horizon "
+                f"{expected_horizon}; got {lower.horizon}"
+            )
+
+        mask = (1 << lower.horizon) - 1
+        mapping: list[tuple[int, int]] = []
+        for class_id, members in enumerate(self.classes):
+            targets_for_bits: list[int] = []
+            for boundary_bit in (0, 1):
+                targets = {
+                    lower.class_id(
+                        integer_successor(state, boundary_bit, self.horizon)
+                        & mask
+                    )
+                    for state in members
+                }
+                if len(targets) != 1:
+                    raise ValueError(
+                        "nested transition is not well-defined for finite "
+                        f"class {class_id} at horizon {self.horizon} "
+                        f"with boundary bit {boundary_bit}"
+                    )
+                targets_for_bits.append(targets.pop())
+            mapping.append((targets_for_bits[0], targets_for_bits[1]))
+        return tuple(mapping)
+
     def right_truncation_fibers(
         self, lower: PredictivePartition
     ) -> tuple[tuple[int, ...], ...]:

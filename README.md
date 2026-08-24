@@ -178,6 +178,11 @@ checks and returns the class map induced by dropping the highest encoded bit.
 `PredictivePartition.class_members(class_id)` exposes one immutable finite
 class, while `right_truncation_fibers(lower)` groups source class IDs by their
 lower-horizon target after repeating the map's finite well-definedness checks.
+`nested_transition_map(lower)` exposes the checked boundary-driven map from
+each `S_h` class to its `S_{h-1}` target after one update and right truncation;
+each source entry contains targets for boundary bits `0` and `1`. This is a
+finite nested map, not a same-horizon transition function or an
+infinite-horizon quotient.
 
 ## Curated experiment index
 
