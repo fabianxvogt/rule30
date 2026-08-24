@@ -163,6 +163,23 @@ class IntegerSuccessorTests(unittest.TestCase):
                     ],
                 )
 
+    def test_class_members_are_immutable_and_class_ids_are_validated(self) -> None:
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            for class_id, members in enumerate(partition.classes):
+                with self.subTest(horizon=horizon, class_id=class_id):
+                    self.assertEqual(partition.class_members(class_id), members)
+                    self.assertEqual(
+                        tuple(partition.class_id(state) for state in members),
+                        (class_id,) * len(members),
+                    )
+
+            invalid_ids = (-1, len(partition.classes), "0", None, True)
+            for invalid_id in invalid_ids:
+                with self.subTest(horizon=horizon, invalid_id=invalid_id):
+                    with self.assertRaises(ValueError):
+                        partition.class_members(invalid_id)
+
     def test_predictive_partition_is_exact_for_finite_signatures(self) -> None:
         for horizon in range(7):
             partition = predictive_partition(horizon)
@@ -212,6 +229,34 @@ class IntegerSuccessorTests(unittest.TestCase):
             partition.right_truncation_map(predictive_partition(3))
         with self.assertRaises(ValueError):
             partition.right_truncation_map(predictive_partition(1))
+
+    def test_right_truncation_fibers_match_map_and_member_projection(self) -> None:
+        for horizon in range(1, 7):
+            higher = predictive_partition(horizon)
+            lower = predictive_partition(horizon - 1)
+            mapping = higher.right_truncation_map(lower)
+            fibers = higher.right_truncation_fibers(lower)
+            mask = (1 << (horizon - 1)) - 1
+
+            self.assertEqual(len(fibers), len(lower.classes))
+            self.assertEqual(
+                sorted(source_id for fiber in fibers for source_id in fiber),
+                list(range(len(higher.classes))),
+            )
+            for lower_class_id, source_class_ids in enumerate(fibers):
+                for source_class_id in source_class_ids:
+                    with self.subTest(
+                        horizon=horizon,
+                        lower_class_id=lower_class_id,
+                        source_class_id=source_class_id,
+                    ):
+                        self.assertEqual(mapping[source_class_id], lower_class_id)
+                        self.assertTrue(
+                            all(
+                                lower.class_id(state & mask) == lower_class_id
+                                for state in higher.class_members(source_class_id)
+                            )
+                        )
 
     def test_predictive_partition_rejects_invalid_horizons_and_states(self) -> None:
         with self.assertRaises(ValueError):

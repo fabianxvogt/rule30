@@ -61,3 +61,4 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: added a deterministic finite-horizon predictive partition API built from response signatures, with exhaustive regression through h = 6. [EMPIRICAL implementation check]
 - 2026-08-25: added the repository-local `rule30` facade for the bounded transition and predictive-partition helpers; existing experiment imports remain supported. [EMPIRICAL integration check]
 - 2026-08-25: added a finite cross-horizon right-truncation map on predictive partitions, exhaustively checked through h = 6; no infinite-horizon quotient claim. [EMPIRICAL implementation check]
+- 2026-08-25: added validated finite class-member and right-truncation-fiber introspection, exhaustively checked through h = 6; no infinite-horizon quotient claim. [EMPIRICAL implementation check]

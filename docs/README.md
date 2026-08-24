@@ -30,3 +30,6 @@ for the compatibility checks and explicit finite-horizon limits. The facade
 does not include the exploratory scripts or generated results. The
 `PredictivePartition.right_truncation_map` method exposes the adjacent-horizon
 projection described in the [cross-horizon report](agent-wave-2026-08-25-cross-horizon-map.md).
+`class_members` and `right_truncation_fibers` provide immutable class members
+and source-class fibers for the same finite partitions, with class-ID and
+adjacent-horizon validation.

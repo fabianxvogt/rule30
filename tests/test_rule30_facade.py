@@ -59,6 +59,21 @@ class Rule30FacadeTests(unittest.TestCase):
             ),
         )
 
+    def test_facade_exposes_finite_class_and_fiber_introspection(self) -> None:
+        higher = rule30.predictive_partition(4)
+        lower = rule30.predictive_partition(3)
+
+        self.assertEqual(higher.class_members(0), higher.classes[0])
+        fibers = higher.right_truncation_fibers(lower)
+        self.assertEqual(
+            sorted(source_id for fiber in fibers for source_id in fiber),
+            list(range(len(higher.classes))),
+        )
+        mapping = higher.right_truncation_map(lower)
+        for lower_class_id, source_class_ids in enumerate(fibers):
+            for source_class_id in source_class_ids:
+                self.assertEqual(mapping[source_class_id], lower_class_id)
+
     def test_existing_experiment_import_remains_usable(self) -> None:
         self.assertEqual(
             rule30_successor.integer_successor(0b101, 1, 3),

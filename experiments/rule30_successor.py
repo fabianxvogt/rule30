@@ -50,6 +50,26 @@ class PredictivePartition:
             )
         return self._state_to_class[state]
 
+    def class_members(self, class_id: int) -> tuple[int, ...]:
+        """Return the encoded states in one finite quotient class.
+
+        Class IDs are the deterministic, first-seen IDs in ``classes``.  The
+        returned tuple is immutable and preserves the member ordering used by
+        the exhaustive partition builder.  This is finite introspection only;
+        it does not expose or imply an infinite-horizon class.
+        """
+
+        if (
+            not isinstance(class_id, int)
+            or isinstance(class_id, bool)
+            or not 0 <= class_id < len(self.classes)
+        ):
+            raise ValueError(
+                "class_id must be an integer in "
+                f"[0, {len(self.classes)}); got {class_id}"
+            )
+        return self.classes[class_id]
+
     def right_truncation_map(
         self, lower: PredictivePartition
     ) -> tuple[int, ...]:
@@ -84,6 +104,24 @@ class PredictivePartition:
                 )
             mapping.append(targets.pop())
         return tuple(mapping)
+
+    def right_truncation_fibers(
+        self, lower: PredictivePartition
+    ) -> tuple[tuple[int, ...], ...]:
+        """Return source-class fibers of the checked truncation map.
+
+        The returned tuple is indexed by class ID in ``lower``.  Each entry
+        contains the source class IDs in this partition whose finite
+        right-truncation lands in that lower class.  The adjacent-horizon and
+        finite well-definedness checks are delegated to
+        :meth:`right_truncation_map` before fibers are grouped.
+        """
+
+        mapping = self.right_truncation_map(lower)
+        fibers: list[list[int]] = [[] for _ in lower.classes]
+        for source_class_id, target_class_id in enumerate(mapping):
+            fibers[target_class_id].append(source_class_id)
+        return tuple(tuple(source_ids) for source_ids in fibers)
 
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
