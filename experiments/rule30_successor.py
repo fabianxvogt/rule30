@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-__all__ = ["evolve_integer_state", "integer_successor"]
+__all__ = ["evolve_integer_state", "integer_successor", "response_trace"]
 
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
@@ -39,3 +39,21 @@ def evolve_integer_state(
     for boundary_bit in boundary_bits:
         state = integer_successor(state, boundary_bit, horizon)
     return state
+
+
+def response_trace(
+    state: int, boundary_bits: Iterable[int], horizon: int
+) -> tuple[int, ...]:
+    """Return the observed leftmost bit before each boundary-driven update.
+
+    This is the integer counterpart of the predictive-state response trace:
+    each output is sampled from the current state, then the corresponding
+    boundary bit advances the state.  ``boundary_bits`` is consumed once from
+    left to right, and an empty iterable returns an empty trace.
+    """
+
+    output: list[int] = []
+    for boundary_bit in boundary_bits:
+        output.append(state & 1)
+        state = integer_successor(state, boundary_bit, horizon)
+    return tuple(output)

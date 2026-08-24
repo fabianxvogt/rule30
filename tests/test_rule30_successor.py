@@ -5,7 +5,11 @@ import sys
 import unittest
 from pathlib import Path
 
-from experiments.rule30_successor import evolve_integer_state, integer_successor
+from experiments.rule30_successor import (
+    evolve_integer_state,
+    integer_successor,
+    response_trace,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +24,13 @@ def tuple_successor(state: int, boundary_bit: int, horizon: int) -> int:
         for i in range(horizon)
     )
     return sum(bit << i for i, bit in enumerate(next_bits))
+
+
+def tuple_state_successor(
+    state: tuple[int, ...], boundary_bit: int
+) -> tuple[int, ...]:
+    row = (boundary_bit,) + state + (0,)
+    return tuple(row[i] ^ (row[i + 1] | row[i + 2]) for i in range(len(state)))
 
 
 class IntegerSuccessorTests(unittest.TestCase):
@@ -40,6 +51,26 @@ class IntegerSuccessorTests(unittest.TestCase):
         for boundary_bit in boundary_bits:
             expected = integer_successor(expected, boundary_bit, 4)
         self.assertEqual(evolve_integer_state(0b0101, boundary_bits, 4), expected)
+
+    def test_response_trace_samples_before_each_update(self) -> None:
+        boundary_bits = (1, 0, 1, 1)
+        expected = []
+        state = 0b0101
+        for boundary_bit in boundary_bits:
+            expected.append(state & 1)
+            state = integer_successor(state, boundary_bit, 4)
+        self.assertEqual(response_trace(0b0101, boundary_bits, 4), tuple(expected))
+
+    def test_response_trace_consumes_a_boundary_iterable_once(self) -> None:
+        consumed = []
+
+        def boundary_bits():
+            for bit in (1, 0, 1):
+                consumed.append(bit)
+                yield bit
+
+        response_trace(0b001, boundary_bits(), 3)
+        self.assertEqual(consumed, [1, 0, 1])
 
     def test_matches_tuple_reference_through_bounded_width(self) -> None:
         for horizon in range(9):
@@ -75,6 +106,48 @@ class IntegerSuccessorTests(unittest.TestCase):
                                 evolve_integer_state(state, boundary_bits, horizon),
                                 expected,
                             )
+
+    def test_response_signatures_preserve_bounded_quotient_partition(self) -> None:
+        expected_class_counts = (1, 2, 3, 5, 7, 11, 16)
+        for horizon in range(7):
+            boundary_words = tuple(
+                tuple((word >> i) & 1 for i in range(horizon))
+                for word in range(1 << horizon)
+            )
+            integer_signatures = set()
+            tuple_signatures = set()
+            for state in range(1 << horizon):
+                encoded_signature = tuple(
+                    response_trace(state, boundary_word, horizon)
+                    for boundary_word in boundary_words
+                )
+                tuple_state = tuple((state >> i) & 1 for i in range(horizon))
+                reference_signature = tuple(
+                    tuple(
+                        (current_state[0] if current_state else 0)
+                        for current_state in self._tuple_states(
+                            tuple_state, boundary_word
+                        )
+                    )
+                    for boundary_word in boundary_words
+                )
+                integer_signatures.add(encoded_signature)
+                tuple_signatures.add(reference_signature)
+            with self.subTest(horizon=horizon):
+                self.assertEqual(integer_signatures, tuple_signatures)
+                self.assertEqual(
+                    len(integer_signatures), expected_class_counts[horizon]
+                )
+
+    @staticmethod
+    def _tuple_states(
+        state: tuple[int, ...], boundary_bits: tuple[int, ...]
+    ) -> tuple[tuple[int, ...], ...]:
+        states = []
+        for boundary_bit in boundary_bits:
+            states.append(state)
+            state = tuple_state_successor(state, boundary_bit)
+        return tuple(states)
 
     def test_checker_cli_output_remains_stable(self) -> None:
         completed = subprocess.run(
