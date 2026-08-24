@@ -91,6 +91,16 @@ class Rule30FacadeTests(unittest.TestCase):
                     lower.class_id(next_state & 0b111),
                 )
 
+    def test_facade_exposes_finite_class_trace(self) -> None:
+        package_partition = rule30.predictive_partition(3)
+        implementation_partition = rule30_successor.predictive_partition(3)
+        bits = (1, 0, 1)
+
+        self.assertEqual(
+            package_partition.class_trace(0b001, bits),
+            implementation_partition.class_trace(0b001, bits),
+        )
+
     def test_existing_experiment_import_remains_usable(self) -> None:
         self.assertEqual(
             rule30_successor.integer_successor(0b101, 1, 3),

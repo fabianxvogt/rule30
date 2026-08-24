@@ -70,6 +70,25 @@ class PredictivePartition:
             )
         return self.classes[class_id]
 
+    def class_trace(
+        self, state: int, boundary_bits: Iterable[int]
+    ) -> tuple[int, ...]:
+        """Return the finite class ID before each boundary-driven update.
+
+        The returned tuple has one entry per consumed boundary bit. Each
+        entry identifies the class of the current encoded state before that
+        bit is applied; the final state after the last bit is not included.
+        An empty boundary word therefore returns an empty trace. This is a
+        finite trajectory helper, not an infinite-horizon class process.
+        """
+
+        self.class_id(state)
+        trace: list[int] = []
+        for boundary_bit in boundary_bits:
+            trace.append(self.class_id(state))
+            state = integer_successor(state, boundary_bit, self.horizon)
+        return tuple(trace)
+
     def right_truncation_map(
         self, lower: PredictivePartition
     ) -> tuple[int, ...]:

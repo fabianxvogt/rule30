@@ -75,6 +75,49 @@ class IntegerSuccessorTests(unittest.TestCase):
         response_trace(0b001, boundary_bits(), 3)
         self.assertEqual(consumed, [1, 0, 1])
 
+    def test_class_trace_matches_exhaustive_finite_trajectory_reference(self) -> None:
+        for horizon in range(7):
+            partition = predictive_partition(horizon)
+            for state in range(1 << horizon):
+                for word_length in range(5):
+                    for boundary_word in range(1 << word_length):
+                        boundary_bits = tuple(
+                            (boundary_word >> i) & 1 for i in range(word_length)
+                        )
+                        expected = []
+                        current_state = state
+                        for boundary_bit in boundary_bits:
+                            expected.append(partition.class_id(current_state))
+                            current_state = tuple_successor(
+                                current_state, boundary_bit, horizon
+                            )
+                        with self.subTest(
+                            horizon=horizon,
+                            state=state,
+                            boundary_bits=boundary_bits,
+                        ):
+                            self.assertEqual(
+                                partition.class_trace(state, boundary_bits),
+                                tuple(expected),
+                            )
+
+    def test_class_trace_validates_initial_state_and_consumes_once(self) -> None:
+        partition = predictive_partition(3)
+        consumed = []
+
+        def boundary_bits():
+            for bit in (1, 0, 1):
+                consumed.append(bit)
+                yield bit
+
+        self.assertEqual(
+            partition.class_trace(0b001, boundary_bits()),
+            tuple(partition.class_id(state) for state in (0b001, 0b010, 0b111)),
+        )
+        self.assertEqual(consumed, [1, 0, 1])
+        with self.assertRaises(ValueError):
+            partition.class_trace(0b1000, ())
+
     def test_matches_tuple_reference_through_bounded_width(self) -> None:
         for horizon in range(9):
             for state in range(1 << horizon):

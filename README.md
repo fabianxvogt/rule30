@@ -184,7 +184,11 @@ lower-horizon target after repeating the map's finite well-definedness checks.
 each `S_h` class to its `S_{h-1}` target after one update and right truncation;
 each source entry contains targets for boundary bits `0` and `1`. This is a
 finite nested map, not a same-horizon transition function or an
-infinite-horizon quotient.
+infinite-horizon quotient. `PredictivePartition.class_trace(state,
+boundary_bits)` returns the finite class ID observed before each supplied
+update; the empty boundary word returns an empty trace. Taking
+`set(partition.class_trace(...))` gives the classes visited during that finite
+trace, but this does not make a claim about eventual or infinite coverage.
 
 ## Curated experiment index
 
