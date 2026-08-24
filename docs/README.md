@@ -35,4 +35,6 @@ and source-class fibers for the same finite partitions, with class-ID and
 adjacent-horizon validation. `nested_transition_map` provides the separately
 checked boundary-driven map from `S_h` to `S_{h-1}` after one update and right
 truncation; it does not assert same-horizon determinism or an infinite
-quotient.
+quotient. The partition builder uses a finite recursive lower-horizon key while
+still enumerating every bounded state; it remains an exponential small-check
+tool, not an infinite-horizon construction.

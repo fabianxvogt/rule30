@@ -171,8 +171,10 @@ signature = response_signature(0b010101, 6)
 
 The facade also exports `integer_successor`, `evolve_integer_state`,
 `response_trace`, and `PredictivePartition`. `predictive_partition` exhaustively
-enumerates width-`horizon` states and is intended for small bounded checks; it
-does not assert an infinite-horizon quotient or any theorem about Rule 30. For
+enumerates width-`horizon` states, using a recursive lower-horizon class key
+instead of enumerating every boundary word at each level; it is intended for
+small bounded checks and does not assert an infinite-horizon quotient or any
+theorem about Rule 30. For
 adjacent finite horizons, `PredictivePartition.right_truncation_map(lower)`
 checks and returns the class map induced by dropping the highest encoded bit.
 `PredictivePartition.class_members(class_id)` exposes one immutable finite

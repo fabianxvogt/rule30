@@ -193,6 +193,34 @@ class IntegerSuccessorTests(unittest.TestCase):
                         same_class = partition.class_id(left) == partition.class_id(right)
                         self.assertEqual(same_class, signatures[left] == signatures[right])
 
+    def test_recursive_partition_reproduces_bounded_growth_table(self) -> None:
+        expected_class_counts = (
+            1,
+            2,
+            3,
+            5,
+            7,
+            11,
+            16,
+            25,
+            35,
+            52,
+            71,
+            104,
+        )
+        for horizon, expected_count in enumerate(expected_class_counts):
+            partition = predictive_partition(horizon)
+            members = [
+                state for class_members in partition.classes for state in class_members
+            ]
+            with self.subTest(horizon=horizon):
+                self.assertEqual(len(partition.classes), expected_count)
+                self.assertEqual(sorted(members), list(range(1 << horizon)))
+                self.assertEqual(len(members), len(set(members)))
+                for state in range(1 << horizon):
+                    class_id = partition.class_id(state)
+                    self.assertIn(state, partition.class_members(class_id))
+
     def test_right_truncation_map_is_exhaustively_well_defined(self) -> None:
         expected_fiber_distributions = (
             {2: 1},

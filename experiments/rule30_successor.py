@@ -245,24 +245,42 @@ def response_signature(state: int, horizon: int) -> ResponseSignature:
 def predictive_partition(horizon: int) -> PredictivePartition:
     """Build the bounded response-equivalence partition at ``horizon``.
 
-    Every encoded width-``horizon`` state is included.  The implementation is
-    intentionally exhaustive and therefore exponential in ``horizon``; it is
-    suitable for small finite checks, not an unbounded production algorithm.
+    Every encoded width-``horizon`` state is included.  Classes are built from
+    the finite recursive key ``(first_output, successor_on_0,
+    successor_on_1)`` using the already-built lower-horizon partition.  This
+    avoids enumerating all boundary words at every level while remaining an
+    exhaustive finite computation; it is suitable for bounded checks, not an
+    unbounded production algorithm.
     """
 
     if horizon < 0:
         raise ValueError(f"horizon must be non-negative; got {horizon}")
 
-    classes_by_signature: dict[ResponseSignature, list[int]] = {}
-    for state in range(1 << horizon):
-        signature = response_signature(state, horizon)
-        classes_by_signature.setdefault(signature, []).append(state)
+    previous = PredictivePartition(0, ((0,),), (0,))
+    for current_horizon in range(1, horizon + 1):
+        lower_mask = (1 << (current_horizon - 1)) - 1
+        classes_by_key: dict[tuple[int, int, int], list[int]] = {}
+        for state in range(1 << current_horizon):
+            key = (
+                state & 1,
+                previous.class_id(
+                    integer_successor(state, 0, current_horizon) & lower_mask
+                ),
+                previous.class_id(
+                    integer_successor(state, 1, current_horizon) & lower_mask
+                ),
+            )
+            classes_by_key.setdefault(key, []).append(state)
 
-    classes = tuple(
-        tuple(members) for members in classes_by_signature.values()
-    )
-    state_to_class = [0] * (1 << horizon)
-    for class_id, members in enumerate(classes):
-        for state in members:
-            state_to_class[state] = class_id
-    return PredictivePartition(horizon, classes, tuple(state_to_class))
+        classes = tuple(
+            tuple(members) for members in classes_by_key.values()
+        )
+        state_to_class = [0] * (1 << current_horizon)
+        for class_id, members in enumerate(classes):
+            for state in members:
+                state_to_class[state] = class_id
+        previous = PredictivePartition(
+            current_horizon, classes, tuple(state_to_class)
+        )
+
+    return previous
