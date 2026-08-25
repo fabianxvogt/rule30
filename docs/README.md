@@ -77,3 +77,10 @@ records the documented extension through primitive word length `5` and all
 initial states. The best eventual phase-lifted coverage remains `6/7` across
 `832` observations; this is a bounded envelope result with a focused
 regression, not an asymptotic or center-column claim.
+
+The [sibling-fiber parity report](agent-wave-2026-08-25-sibling-fiber-parity.md)
+records an exact dependency-free check of the finite `rho_h` fibers and
+`tau_0`/`tau_1` child maps through `h = 10`. It confirms the even/odd
+child-sharing pattern in that envelope and records the degenerate `h = 1`
+exception. The script has a hard horizon cap and makes no infinite-horizon,
+center-column, or eventual-coverage claim.

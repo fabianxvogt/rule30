@@ -223,6 +223,7 @@ Highlights (see `experiments/` for the full set of ~117 scripts):
 | `search_finite_state_observers.py` | Sweep of tiny finite-state observers of c(t) | Only trivial low-complexity candidates |
 | `truncated_right_half_observer.py` | Reconstruction-aware width-limited observers | Raw truncation does not approximate column 1 well enough |
 | `fiber_growth_table.py`, `child_relationship.py` | Fiber structure of ρ_h: S_h → S_{h−1} | Fibers size ≤ 2; even/odd parity pattern in sibling children |
+| `sibling_fiber_parity.py` | Exact finite ρ/τ sibling check | h≤10 confirms the parity pattern; h=1 is a degenerate exception |
 | `verify_period_bug.py`, `prop13_counterexample.py` | Tests of the retracted Proposition 13 counting bound | Confirmed vacuous: macro-cycle L up to 2^h |
 | `column_periodicity.py` | Temporal periods of fixed columns ±1…±19 | None ≤ 500 within 2000 steps |
 | `edge_structure.py` | Periodicity of light-cone diagonals | Right diagonals double periods; left diagonals small |

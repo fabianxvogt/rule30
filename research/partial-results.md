@@ -627,7 +627,7 @@ class. Therefore the two children have opposite leading bits. ∎
 
 ### Computational Observation 11i (Same Leading Bit and Same Rho-Children for 2-Fiber Siblings)
 
-For h ≤ 21, every 2-element fiber of $\rho_h : S_h \to S_{h-1}$ consists of two classes with
+For $2 \le h \le 21$, every 2-element fiber of $\rho_h : S_h \to S_{h-1}$ consists of two classes with
 the **same** leading bit $\ell$. Moreover, for any 2-fiber siblings $c, c'$ (i.e.,
 $\rho_h(c) = \rho_h(c')$ with $c \ne c'$):
 
@@ -641,9 +641,14 @@ The same-leading-bit property is verified computationally. The same-rho-children
 from the commuting square (Proposition 11g): $\rho_{h-1}(\tau_b(c)) = \tau_b(\rho_h(c)) =
 \tau_b(\rho_h(c'))= \rho_{h-1}(\tau_b(c'))$.
 
+At $h=1$, this statement is false in the degenerate finite partition: the two classes in the
+single $\rho_1$-fiber have leading bits 0 and 1. See
+`experiments/sibling_fiber_parity.py` and
+`docs/agent-wave-2026-08-25-sibling-fiber-parity.md` for the exact bounded witness.
+
 ### Computational Observation 11j (Even/Odd Parity Pattern for 2-Fiber Children)
 
-For 2-element $\rho$-fiber siblings $\{c, c'\}$ at horizon h:
+For 2-element $\rho$-fiber siblings $\{c, c'\}$ at horizon $h \ge 3$:
 
 - **Even h** (verified h ≤ 20): siblings share **neither** child.
   $\tau_0(c) \ne \tau_0(c')$ AND $\tau_1(c) \ne \tau_1(c')$.
@@ -653,6 +658,10 @@ For 2-element $\rho$-fiber siblings $\{c, c'\}$ at horizon h:
   The two cases occur in roughly equal proportions.
 
 (Verified via `experiments/child_relationship.py`.)
+
+The lower bound $h \ge 3$ is necessary for the unqualified parity wording. At $h=1$, both
+children of the two sibling classes are the unique class in $S_0$, so that pair shares both
+children. The even $h=2$ row already has the “share neither” behavior.
 
 ### Observation 11k (Growth Decomposition)
 
