@@ -75,6 +75,36 @@ class PeriodicInputCoverageTests(unittest.TestCase):
         self.assertEqual(observation.cycle_class_count, 5)
         self.assertEqual(observation.machine_cycle_classes, (0, 1, 2, 3, 4))
 
+    def test_horizon_four_period_five_matches_bounded_envelope(self):
+        observations = coverage_envelope(4, 5)
+        by_length = {}
+        for length in range(1, 6):
+            length_observations = [
+                observation
+                for observation in observations
+                if len(observation.boundary_word) == length
+            ]
+            by_length[length] = max(
+                observation.cycle_class_count
+                for observation in length_observations
+            )
+
+        self.assertEqual(len(observations), 52 * 16)
+        self.assertEqual(by_length, {1: 1, 2: 6, 3: 6, 4: 5, 5: 6})
+        self.assertEqual(
+            max(observation.cycle_class_count for observation in observations),
+            6,
+        )
+
+        witness = analyze_macro_cycle(
+            predictive_partition(4), (0, 0, 0, 0, 1), 0
+        )
+        self.assertEqual(witness.macro_transient_steps, 0)
+        self.assertEqual(witness.macro_cycle_steps, 3)
+        self.assertEqual(witness.machine_period, 15)
+        self.assertEqual(witness.cycle_class_count, 6)
+        self.assertEqual(witness.machine_cycle_classes, (0, 1, 2, 3, 4, 5))
+
     def test_envelope_is_bounded_and_reports_separate_cycle_coverage(self):
         observations = coverage_envelope(3, 2, initial_states=(0, 1))
         self.assertEqual(len(observations), 8)

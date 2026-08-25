@@ -71,3 +71,9 @@ The [phase-coverage compatibility report](agent-wave-2026-08-25-phase-coverage-c
 records a bounded nonconstant periodic-driver witness whose phase-lifted cycle
 visits every class at `h=3`; it is an incremental finite consistency result,
 not a center-column claim.
+
+The [h=4 phase-coverage report](agent-wave-2026-08-25-h4-phase-coverage.md)
+records the documented extension through primitive word length `5` and all
+initial states. The best eventual phase-lifted coverage remains `6/7` across
+`832` observations; this is a bounded envelope result with a focused
+regression, not an asymptotic or center-column claim.

@@ -86,3 +86,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   incremental empirical evidence against repairing Proposition 13 by requiring
   periodic drivers to miss a class; no center-column claim. [EMPIRICAL,
   INCREMENTAL; bounded]
+- 2026-08-25: completed the documented h=4 extension through primitive boundary
+  lengths 1..5 and all 16 initial states. Across 832 exact phase-lifted cycle
+  observations, the best coverage remained 6/7; the length-5 slice also tops
+  out at 6/7. Added a focused regression and concise bounded report. [EMPIRICAL,
+  INCREMENTAL; bounded]
