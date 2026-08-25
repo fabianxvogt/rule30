@@ -159,3 +159,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   forms and fixed Python hash seeds 0 and 42 at h=13; both modes were byte-identical across the
   matrix. Added an exact h=3 subprocess regression covering the same matrix, with no computation
   above h=13 and no asymptotic claim. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: audited the finite CLI report as a structured document at h=0 and h=3 with and
+  without distance reporting. Added regression coverage for summary/pair row ordering, empty
+  pair-section boundaries, shared summary rows, and exact h=13 cap/limits wording; no computation
+  above h=13 or asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]

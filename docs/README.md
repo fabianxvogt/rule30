@@ -116,3 +116,9 @@ audits default and distance-reporting output across fixed Python hash seeds
 and script/module invocation forms. Its exact regression uses `h = 3` for
 fast matrix coverage while the manual audit confirms the same bytes through
 the existing `h = 13` cap.
+
+The [lower-boundary report-structure report](agent-wave-2026-08-25-cli-boundary-structure.md)
+checks the `h = 0` and `h = 3` reports in both distance modes as structured
+finite documents: summary and pair-row ordering, empty-section placement,
+shared summary boundaries, and exact cap/limits wording. It adds no computation
+above `h = 13` and makes no asymptotic claim.

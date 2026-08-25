@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import ast
 from collections import Counter
 import hashlib
 from itertools import product
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import unittest
@@ -23,6 +25,112 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_lower_boundary_report_structure_is_bounded_and_ordered(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        limits = (
+            "Limits: raw tuple-state partitions only; implementation hard cap "
+            f"h={MAX_HORIZON}; no claim for larger horizons, an infinite quotient, "
+            "center-column coverage, or periodicity."
+        )
+        pair_row_pattern = re.compile(
+            r"^\s*(\d+)\s+(\([^)]*\))\s+(\([^)]*\))\s+"
+            r"(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$"
+        )
+        reports: dict[tuple[int, bool], list[str]] = {}
+
+        for horizon in (0, 3):
+            for report_distances in (False, True):
+                command = [
+                    sys.executable,
+                    str(script),
+                    "--max-horizon",
+                    str(horizon),
+                ]
+                if report_distances:
+                    command.append("--report-distances")
+                report = subprocess.run(
+                    command,
+                    cwd=repository_root,
+                    env=environment,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(report.returncode, 0, report.stderr)
+                self.assertEqual(report.stderr, "")
+                lines = report.stdout.splitlines()
+                reports[(horizon, report_distances)] = lines
+
+                self.assertEqual(
+                    lines[:4],
+                    [
+                        f"Bounds: requested max horizon={horizon}; "
+                        f"implementation hard cap={MAX_HORIZON}",
+                        "Raw sibling-fiber parity check (EMPIRICAL; exact within bound)",
+                        "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
+                        "share-both share-neither coll0 coll1",
+                        "-- ----- -- -- --------- ---------- ---------- "
+                        "---------- ------------ ----- -----",
+                    ],
+                )
+                summary_rows = lines[4 : 4 + horizon]
+                self.assertEqual(
+                    [int(row.split()[0]) for row in summary_rows],
+                    list(range(1, horizon + 1)),
+                )
+                self.assertEqual(lines[-1], limits)
+
+                if not report_distances:
+                    self.assertEqual(lines[4 + horizon], limits)
+                    self.assertNotIn(
+                        "Pairwise raw signature distances (exact within bound)",
+                        lines,
+                    )
+                    self.assertNotIn(
+                        "h first-state second-state leading-equal full d0 d1",
+                        lines,
+                    )
+                    continue
+
+                self.assertEqual(lines[4 + horizon], "")
+                pair_section = 5 + horizon
+                pair_header = 6 + horizon
+                self.assertEqual(
+                    lines[pair_section],
+                    "Pairwise raw signature distances (exact within bound)",
+                )
+                self.assertEqual(
+                    lines[pair_header],
+                    "h first-state second-state leading-equal full d0 d1",
+                )
+                pair_rows = lines[pair_header + 1 : -1]
+                expected_pair_count = {0: 0, 3: 4}[horizon]
+                self.assertEqual(len(pair_rows), expected_pair_count)
+                pair_keys = []
+                for row in pair_rows:
+                    match = pair_row_pattern.fullmatch(row)
+                    self.assertIsNotNone(match, row)
+                    assert match is not None
+                    first_state = ast.literal_eval(match.group(2))
+                    second_state = ast.literal_eval(match.group(3))
+                    self.assertLess(first_state, second_state)
+                    pair_keys.append(
+                        (int(match.group(1)), first_state, second_state)
+                    )
+                self.assertEqual(pair_keys, sorted(pair_keys))
+
+            self.assertEqual(
+                reports[(horizon, False)][: 4 + horizon],
+                reports[(horizon, True)][: 4 + horizon],
+            )
+            self.assertEqual(
+                reports[(horizon, False)][-1],
+                reports[(horizon, True)][-1],
+            )
+
     def test_cli_omitted_flags_use_bounded_default_without_distances(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"
