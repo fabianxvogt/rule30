@@ -137,3 +137,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   limits with no horizon or pair rows, while the existing h=3 snapshot and h=13/h=14 boundary
   checks remain unchanged. No computation beyond h=13 or asymptotic claim was added. [EMPIRICAL,
   INCREMENTAL; bounded]
+- 2026-08-25: added an exact subprocess regression for the negative lower CLI boundary:
+  `h=-1` now has explicit status-2, empty-stdout, and `[0, 13]` validation coverage before any
+  finite audit starts. The h=0, h=3, h=13, and h=14 checks and the h<=13 cap remain unchanged;
+  no asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
