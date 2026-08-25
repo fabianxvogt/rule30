@@ -108,9 +108,10 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: corrected the public fast-coverage reproduction command to pass an explicit h=13
   bound and the tracked 100,001-bit fixture; the bounded run covered all 203 classes at step
   9,742. [EMPIRICAL, INCREMENTAL]
-- 2026-08-25: recorded an independent bounded raw-signature observation: each doubleton pair
-  differs on exactly `2^(floor(h/2)+1)` boundary words through h=13; no theorem or automated
-  regression is claimed. [EMPIRICAL, bounded]
+- 2026-08-25: recorded a bounded raw-signature distance observation: each doubleton pair
+  differs on exactly `2^(floor(h/2)+1)` boundary words through h=13, with a regression over
+  the compact audit result; the direct tuple-state cross-check remains smaller and no theorem
+  or independent second h=13 recomputation is claimed. [EMPIRICAL, bounded]
 - 2026-08-25: reviewed the finite signature-distance observation. The existing child-sharing
   data gives a conditional block-decomposition explanation through h=13, but no counterexample,
   asymptotic claim, or center-column bridge; this review motivated the subsequent pairwise

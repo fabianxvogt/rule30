@@ -112,6 +112,10 @@ class SiblingFiberParityTests(unittest.TestCase):
         expected_pair_count = sum(row[3] for row in expected)
         self.assertEqual(len(result.pairwise_distances), expected_pair_count)
         for report in result.pairwise_distances:
+            self.assertEqual(
+                report.full_distance,
+                2 ** (report.horizon // 2 + 1),
+            )
             if report.horizon == 1:
                 self.assertFalse(report.leading_bits_equal)
                 self.assertEqual(

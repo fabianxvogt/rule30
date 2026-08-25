@@ -40,13 +40,15 @@ sharing `tau_0` and 31 sharing `tau_1`; no pair shares both or neither, and the
 two collision counts match those directions. The same-leading-bit condition
 also continues to hold for all 62 doubleton pairs.
 
-A separate raw cross-check also compared each doubleton pair's complete
-response signatures over all `2^h` boundary words. For every checked horizon
-`1 <= h <= 13`, each pair differed on exactly
-`2^(floor(h/2) + 1)` words. Thus at `h = 13`, all 62 pairs differed on 128 of
+A finite regression now asserts the compact raw audit's complete-signature
+distance for every reported doubleton pair. For every checked horizon
+`1 <= h <= 13`, each pair differs on exactly
+`2^(floor(h/2) + 1)` words. Thus at `h = 13`, all 62 pairs differ on 128 of
 8192 words; the disagreements occupy both first-bit halves at even horizons
-and one first-bit half at odd horizons. This is an additional finite empirical
-observation, not an automated regression or a parity theorem.
+and one first-bit half at odd horizons. The regression consumes the
+`AuditResult` produced by this same raw implementation; it is not an
+independent direct-signature recomputation at every horizon, and it remains a
+finite empirical observation rather than a parity theorem.
 
 ## Bounded review of the distance observation
 
@@ -86,6 +88,9 @@ For all 31 encoded states at `h = 0..4`, the raw signatures matched the tuple
 reference in `experiments/right_half_response_classes.py`; the regression keeps
 this explicit cross-check. A separate focused regression also compares the
 compact raw signatures with the direct tuple-state signatures through `h = 5`.
+The distance-law assertion through `h = 13` is intentionally a consistency
+check over the compact audit output, not evidence of a second implementation
+of all h=13 signatures.
 The compact h=13 signatures preserve lexicographic
 boundary-word order, while the package's integer helper uses a different order.
 Comparing flattened arrays without aligning words therefore remains an invalid

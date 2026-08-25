@@ -80,13 +80,15 @@ doubletons split evenly between sharing `tau_0` and `tau_1` (31 each), with no
 share-both or share-neither pairs; the two collision counts are also 31 and
 31.
 
-A separate raw comparison of the full response signatures adds one more
-bounded observation: every doubleton pair differed on exactly
+A finite regression over the raw audit result now records one more bounded
+observation: every doubleton pair differs on exactly
 `2^(floor(h/2) + 1)` of the `2^h` boundary words for each checked
 `1 <= h <= 13`. At `h=13`, that is 128 disagreements per pair across 8192
 words. Disagreements occupy both first-bit halves at even horizons and one
-half at odd horizons. This observation is empirical and has not been promoted
-to an automated regression or a general theorem.
+half at odd horizons. The assertion checks the compact raw audit's reported
+distances; the direct tuple-state cross-check remains limited to the smaller
+regression envelope documented in the raw-audit report. This is still a finite
+empirical observation, not a general theorem.
 
 There is a bounded conditional explanation for this distance law. If `d_h`
 denotes the Hamming distance between a doubleton pair's complete signatures,
