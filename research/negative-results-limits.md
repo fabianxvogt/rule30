@@ -93,11 +93,10 @@ the two first-boundary-bit blocks give
 `d_h = d_{h-1}(tau_0 pair) + d_{h-1}(tau_1 pair)` whenever the siblings have
 the same leading bit. The recorded child-sharing pattern therefore implies
 `d_h = 2d_{h-1}` at even horizons and `d_h = d_{h-1}` at odd horizons `h >= 3`,
-with the explicit base `d_1 = 2`. This derives the displayed formula only
-inside the checked envelope and conditional on those already empirical
-premises; it is not an asymptotic argument. A useful next bounded test would
-record the two child distances for every pair and check this decomposition
-pair by pair, rather than relying on aggregate counts.
+with the explicit base `d_1 = 2`. The follow-up raw audit now checks the
+decomposition pair by pair through `h=13`, with the unequal-leading-bit `h=1`
+case reported separately. This remains a finite empirical verification rather
+than an asymptotic argument; see the [pairwise child-distance report](../docs/agent-wave-2026-08-25-child-distance-decomposition.md).
 
 The commuting-square and lower-fiber checks also hold throughout this finite
 envelope. These observations describe a bounded zero-padded quotient; they do

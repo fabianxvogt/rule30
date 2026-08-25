@@ -98,3 +98,9 @@ records an exact raw tuple-state check of the finite `rho_h` fibers and
 child-sharing pattern in that envelope and records the degenerate `h = 1`
 exception. The script has an explicit raw-state cap and makes no
 infinite-horizon, center-column, or eventual-coverage claim.
+
+The [pairwise child-distance report](agent-wave-2026-08-25-child-distance-decomposition.md)
+extends that bounded audit with an exact comparison of every doubleton pair's
+full signature distance against both child distances. It records the explicit
+`h = 1` leading-bit exception and verifies the equal-leading-bit decomposition
+for every pair through `h = 13`.

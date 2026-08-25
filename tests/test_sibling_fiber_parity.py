@@ -8,7 +8,9 @@ from experiments.sibling_fiber_parity import (
     MAX_HORIZON,
     MAX_RAW_STATES,
     _packed_signatures,
+    _raw_successor,
     analyze,
+    audit,
     raw_signature,
 )
 from rule30 import predictive_partition
@@ -16,7 +18,8 @@ from rule30 import predictive_partition
 
 class SiblingFiberParityTests(unittest.TestCase):
     def test_empirical_bounded_table_through_horizon_thirteen(self) -> None:
-        summaries = analyze(MAX_HORIZON)
+        result = audit(MAX_HORIZON)
+        summaries = result.summaries
         expected = (
             # h, |S_h|, n1, n2, same ell, share tau0, share tau1,
             # share both, share neither, collisions tau0, collisions tau1
@@ -51,6 +54,80 @@ class SiblingFiberParityTests(unittest.TestCase):
             for summary in summaries
         )
         self.assertEqual(actual, expected)
+
+        expected_pair_count = sum(row[3] for row in expected)
+        self.assertEqual(len(result.pairwise_distances), expected_pair_count)
+        for report in result.pairwise_distances:
+            if report.horizon == 1:
+                self.assertFalse(report.leading_bits_equal)
+                self.assertEqual(
+                    (
+                        report.full_distance,
+                        report.child_distance_0,
+                        report.child_distance_1,
+                    ),
+                    (2, 0, 0),
+                )
+            else:
+                self.assertTrue(report.leading_bits_equal)
+                self.assertEqual(
+                    report.full_distance,
+                    report.child_distance_0 + report.child_distance_1,
+                )
+
+        h13 = [
+            report
+            for report in result.pairwise_distances
+            if report.horizon == MAX_HORIZON
+        ]
+        self.assertEqual(len(h13), 62)
+        self.assertEqual(
+            {
+                (
+                    report.full_distance,
+                    report.child_distance_0,
+                    report.child_distance_1,
+                )
+                for report in h13
+            },
+            {(128, 0, 128), (128, 128, 0)},
+        )
+
+        def direct_distance(
+            first: tuple[int, ...], second: tuple[int, ...], horizon: int
+        ) -> int:
+            first_signature = raw_signature(first, horizon)
+            second_signature = raw_signature(second, horizon)
+            return sum(
+                first_bit != second_bit
+                for first_trace, second_trace in zip(
+                    first_signature, second_signature
+                )
+                for first_bit, second_bit in zip(first_trace, second_trace)
+            )
+
+        for report in result.pairwise_distances:
+            if report.horizon > 5:
+                continue
+            self.assertEqual(
+                direct_distance(
+                    report.first_state, report.second_state, report.horizon
+                ),
+                report.full_distance,
+            )
+            for boundary_bit, expected_distance in enumerate(
+                (report.child_distance_0, report.child_distance_1)
+            ):
+                first_child = _raw_successor(
+                    report.first_state, boundary_bit
+                )[:-1]
+                second_child = _raw_successor(
+                    report.second_state, boundary_bit
+                )[:-1]
+                self.assertEqual(
+                    direct_distance(first_child, second_child, report.horizon - 1),
+                    expected_distance,
+                )
 
     def test_horizon_one_is_an_explicit_degenerate_exception(self) -> None:
         partition = predictive_partition(1)

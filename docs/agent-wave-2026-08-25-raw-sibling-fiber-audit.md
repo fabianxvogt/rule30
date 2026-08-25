@@ -74,10 +74,11 @@ child-sharing data, not a proof that the child-sharing premises continue past
 `h=13`. No counterexample appears in the checked envelope, and the argument
 does not provide a center-column bridge or an infinite-horizon conclusion.
 
-The clearest next falsifiable check, still within the existing cap, would be to
-record each pair's two child distances and verify this decomposition pair by
-pair. The current audit records only aggregate parity counts, so that check
-has not been added or run here.
+The follow-up pairwise check is now implemented in the same bounded raw audit.
+It records each doubleton pair's full distance and both child distances, while
+preserving the `h=1` leading-bit exception explicitly. See the
+[pairwise child-distance report](agent-wave-2026-08-25-child-distance-decomposition.md)
+for the exact table and reproduction command.
 
 ## Exact cross-check and limits
 

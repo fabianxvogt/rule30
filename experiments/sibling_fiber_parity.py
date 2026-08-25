@@ -22,6 +22,7 @@ MAX_RAW_STATES = 1 << MAX_HORIZON
 
 RawState = tuple[int, ...]
 RawSignature = bytes
+BYTE_POPCOUNT = tuple(bin(value).count("1") for value in range(256))
 
 
 @dataclass(frozen=True)
@@ -39,6 +40,27 @@ class HorizonSummary:
     share_neither: int
     rho_tau0_collisions: int
     rho_tau1_collisions: int
+
+
+@dataclass(frozen=True)
+class PairDistance:
+    """Exact finite signature distances for one doubleton rho-fiber."""
+
+    horizon: int
+    first_state: RawState
+    second_state: RawState
+    leading_bits_equal: bool
+    full_distance: int
+    child_distance_0: int
+    child_distance_1: int
+
+
+@dataclass(frozen=True)
+class AuditResult:
+    """Raw finite audit summaries and pairwise distance records."""
+
+    summaries: tuple[HorizonSummary, ...]
+    pairwise_distances: tuple[PairDistance, ...]
 
 
 def _validate_horizon(horizon: int) -> None:
@@ -111,6 +133,20 @@ def _packed_signatures(
 
     lower_states = tuple(state[:-1] for state in states)
     lower_signatures = _packed_signatures(lower_states, horizon - 1)
+    return _pack_signatures_from_lower(states, horizon, lower_signatures)
+
+
+def _pack_signatures_from_lower(
+    states: tuple[RawState, ...],
+    horizon: int,
+    lower_signatures: dict[RawState, RawSignature],
+) -> dict[RawState, RawSignature]:
+    """Pack exact raw signatures from already-built lower-horizon signatures."""
+
+    _validate_horizon(horizon)
+    if horizon == 0:
+        return {(): b""}
+
     trace_bytes = max(1, (horizon + 7) // 8)
     child_trace_bytes = max(1, (horizon - 1 + 7) // 8)
     child_trace_count = 1 << (horizon - 1)
@@ -133,16 +169,25 @@ def _packed_signatures(
     return signatures
 
 
+def _partition_from_signatures(
+    states: tuple[RawState, ...],
+    signatures: dict[RawState, RawSignature],
+) -> tuple[tuple[RawState, ...], ...]:
+    """Group raw states by their exact packed response signatures."""
+
+    classes_by_signature: dict[RawSignature, list[RawState]] = {}
+    for state in states:
+        classes_by_signature.setdefault(signatures[state], []).append(state)
+    return tuple(tuple(members) for members in classes_by_signature.values())
+
+
 def _raw_partition(horizon: int) -> tuple[tuple[RawState, ...], ...]:
     """Partition every raw width-horizon state by its exact finite signature."""
 
     _validate_horizon(horizon)
     states = tuple(product((0, 1), repeat=horizon))
     signatures = _packed_signatures(states, horizon)
-    classes_by_signature: dict[RawSignature, list[RawState]] = {}
-    for state in states:
-        classes_by_signature.setdefault(signatures[state], []).append(state)
-    return tuple(tuple(members) for members in classes_by_signature.values())
+    return _partition_from_signatures(states, signatures)
 
 
 def _class_ids(
@@ -166,6 +211,76 @@ def _collision_count(keys: list[tuple[int, int]]) -> int:
     for index, key in enumerate(keys):
         groups[key].append(index)
     return sum(len(group) - 1 for group in groups.values() if len(group) > 1)
+
+
+def _signature_hamming_distance(
+    first: RawSignature, second: RawSignature
+) -> int:
+    """Count differing response bits in two identically packed signatures."""
+
+    if len(first) != len(second):
+        raise AssertionError("packed signatures have different lengths")
+    return sum(
+        BYTE_POPCOUNT[left ^ right] for left, right in zip(first, second)
+    )
+
+
+def _pairwise_distance_report(
+    higher: tuple[tuple[RawState, ...], ...],
+    lower: tuple[tuple[RawState, ...], ...],
+    higher_signatures: dict[RawState, RawSignature],
+    lower_signatures: dict[RawState, RawSignature],
+) -> tuple[PairDistance, ...]:
+    """Compare each finite doubleton pair with both raw child distances."""
+
+    horizon = len(higher[0][0])
+    lower_ids = _class_ids(lower)
+    fibers: list[list[int]] = [[] for _ in lower]
+    for source_class_id, members in enumerate(higher):
+        rho_targets = {lower_ids[state[:-1]] for state in members}
+        if len(rho_targets) != 1:
+            raise AssertionError(
+                f"raw rho is not well-defined for distance report at h={horizon}"
+            )
+        fibers[rho_targets.pop()].append(source_class_id)
+
+    reports: list[PairDistance] = []
+    for fiber in fibers:
+        if len(fiber) != 2:
+            continue
+        first = higher[fiber[0]][0]
+        second = higher[fiber[1]][0]
+        child_distances: list[int] = []
+        for boundary_bit in (0, 1):
+            first_child = _raw_successor(first, boundary_bit)[:-1]
+            second_child = _raw_successor(second, boundary_bit)[:-1]
+            child_distances.append(
+                _signature_hamming_distance(
+                    lower_signatures[first_child], lower_signatures[second_child]
+                )
+            )
+
+        report = PairDistance(
+            horizon=horizon,
+            first_state=first,
+            second_state=second,
+            leading_bits_equal=first[0] == second[0],
+            full_distance=_signature_hamming_distance(
+                higher_signatures[first], higher_signatures[second]
+            ),
+            child_distance_0=child_distances[0],
+            child_distance_1=child_distances[1],
+        )
+        if report.leading_bits_equal and report.full_distance != (
+            report.child_distance_0 + report.child_distance_1
+        ):
+            raise AssertionError(
+                "pairwise child-distance decomposition failed at "
+                f"h={horizon}: {report}"
+            )
+        reports.append(report)
+
+    return tuple(reports)
 
 
 def _summarize(
@@ -318,22 +433,49 @@ def _summarize(
     return summary
 
 
-def analyze(max_horizon: int = MAX_HORIZON) -> tuple[HorizonSummary, ...]:
-    """Exhaustively analyze finite horizons 1 through the explicit cap."""
+def audit(max_horizon: int = MAX_HORIZON) -> AuditResult:
+    """Run the raw finite audit and compare every sibling pair's distances."""
 
     _validate_horizon(max_horizon)
     if (1 << max_horizon) > MAX_RAW_STATES:
         raise ValueError(f"raw state cap exceeded at h={max_horizon}")
 
-    partitions = [_raw_partition(horizon) for horizon in range(max_horizon + 1)]
-    return tuple(
-        _summarize(
-            partitions[horizon],
-            partitions[horizon - 1],
-            partitions[horizon - 2] if horizon >= 2 else None,
+    lower_states = ((),)
+    lower_signatures: dict[RawState, RawSignature] = {(): b""}
+    lower = _partition_from_signatures(lower_states, lower_signatures)
+    lower_lower: tuple[tuple[RawState, ...], ...] | None = None
+    summaries: list[HorizonSummary] = []
+    pairwise_distances: list[PairDistance] = []
+
+    for horizon in range(1, max_horizon + 1):
+        states = tuple(product((0, 1), repeat=horizon))
+        higher_signatures = _pack_signatures_from_lower(
+            states, horizon, lower_signatures
         )
-        for horizon in range(1, max_horizon + 1)
-    )
+        higher = _partition_from_signatures(states, higher_signatures)
+        summary = _summarize(higher, lower, lower_lower)
+        reports = _pairwise_distance_report(
+            higher, lower, higher_signatures, lower_signatures
+        )
+        if len(reports) != summary.doubleton_fibers:
+            raise AssertionError(
+                "distance report does not cover every doubleton fiber at "
+                f"h={horizon}"
+            )
+        summaries.append(summary)
+        pairwise_distances.extend(reports)
+
+        lower_lower = lower
+        lower = higher
+        lower_signatures = higher_signatures
+
+    return AuditResult(tuple(summaries), tuple(pairwise_distances))
+
+
+def analyze(max_horizon: int = MAX_HORIZON) -> tuple[HorizonSummary, ...]:
+    """Exhaustively analyze finite horizons 1 through the explicit cap."""
+
+    return audit(max_horizon).summaries
 
 
 def main() -> None:
@@ -344,11 +486,17 @@ def main() -> None:
         default=MAX_HORIZON,
         help=f"inclusive source horizon, capped at {MAX_HORIZON}",
     )
+    parser.add_argument(
+        "--report-distances",
+        action="store_true",
+        help="print every doubleton pair's full and child distances",
+    )
     args = parser.parse_args()
     try:
-        summaries = analyze(args.max_horizon)
+        result = audit(args.max_horizon)
     except ValueError as error:
         parser.error(str(error))
+    summaries = result.summaries
 
     print("Raw sibling-fiber parity check (EMPIRICAL; exact within bound)")
     print(
@@ -368,6 +516,16 @@ def main() -> None:
             f"{summary.share_both:10d} {summary.share_neither:12d} "
             f"{summary.rho_tau0_collisions:5d} {summary.rho_tau1_collisions:5d}"
         )
+    if args.report_distances:
+        print("\nPairwise raw signature distances (exact within bound)")
+        print("h first-state second-state leading-equal full d0 d1")
+        for report in result.pairwise_distances:
+            print(
+                f"{report.horizon:2d} {report.first_state} {report.second_state} "
+                f"{int(report.leading_bits_equal):13d} "
+                f"{report.full_distance:4d} {report.child_distance_0:2d} "
+                f"{report.child_distance_1:2d}"
+            )
     print(
         "Limits: raw tuple-state partitions only; hard cap h=13; no claim "
         "for larger horizons, an infinite quotient, center-column coverage, "
