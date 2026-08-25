@@ -79,6 +79,14 @@ doubletons split evenly between sharing `tau_0` and `tau_1` (31 each), with no
 share-both or share-neither pairs; the two collision counts are also 31 and
 31.
 
+An independent raw comparison of the full response signatures adds one more
+bounded observation: every doubleton pair differed on exactly
+`2^(floor(h/2) + 1)` of the `2^h` boundary words for each checked
+`1 <= h <= 13`. At `h=13`, that is 128 disagreements per pair across 8192
+words. Disagreements occupy both first-bit halves at even horizons and one
+half at odd horizons. This observation is empirical and has not been promoted
+to an automated regression or a general theorem.
+
 The commuting-square and lower-fiber checks also hold throughout this finite
 envelope. These observations describe a bounded zero-padded quotient; they do
 not establish a parity theorem for larger `h`, an infinite-horizon quotient,

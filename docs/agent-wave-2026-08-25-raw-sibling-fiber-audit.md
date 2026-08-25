@@ -40,6 +40,14 @@ sharing `tau_0` and 31 sharing `tau_1`; no pair shares both or neither, and the
 two collision counts match those directions. The same-leading-bit condition
 also continues to hold for all 62 doubleton pairs.
 
+An independent raw cross-check also compared each doubleton pair's complete
+response signatures over all `2^h` boundary words. For every checked horizon
+`1 <= h <= 13`, each pair differed on exactly
+`2^(floor(h/2) + 1)` words. Thus at `h = 13`, all 62 pairs differed on 128 of
+8192 words; the disagreements occupy both first-bit halves at even horizons
+and one first-bit half at odd horizons. This is an additional finite empirical
+observation, not an automated regression or a parity theorem.
+
 ## Exact cross-check and limits
 
 For all 31 encoded states at `h = 0..4`, the raw signatures matched the tuple

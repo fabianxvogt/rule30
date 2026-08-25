@@ -108,3 +108,6 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: corrected the public fast-coverage reproduction command to pass an explicit h=13
   bound and the tracked 100,001-bit fixture; the bounded run covered all 203 classes at step
   9,742. [EMPIRICAL, INCREMENTAL]
+- 2026-08-25: recorded an independent bounded raw-signature observation: each doubleton pair
+  differs on exactly `2^(floor(h/2)+1)` boundary words through h=13; no theorem or automated
+  regression is claimed. [EMPIRICAL, bounded]
