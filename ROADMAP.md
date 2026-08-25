@@ -19,8 +19,9 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   dependency-free finite contract.
 - Push class coverage / quotient computations beyond h = 22 (needs longer generated columns;
   C generator makes ~10^8 bits feasible).
-- Write up the negative results properly: the vacuity of coverage-based counting bounds after
-  the Proposition 13 correction, and the non-stabilization of truncation periods.
+- [x] Write up the negative results and limits: the vacuity of coverage-based counting bounds
+  after the Proposition 13 correction, periodic-input phase audits, and raw sibling-fiber
+  evidence through `h=12` (`research/negative-results-limits.md`).
 - Prove or refute the Coverage Hypothesis (all S_h classes visited) — now interesting in its
   own right, independent of the counting argument.
 - Keep the bounded raw sibling-fiber parity check at its explicit h=12 cap; no infinite claim is

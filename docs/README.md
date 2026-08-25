@@ -6,6 +6,15 @@ The project README and any document marked `human-owned` remain authoritative. D
 
 Never store credentials, private data, generated output, logs, datasets, or build artifacts here. Preserve unrelated local work and keep each change focused.
 
+## Negative-results entry point
+
+The concise cross-report note
+[`research/negative-results-limits.md`](../research/negative-results-limits.md)
+is the current entry point for the Proposition 13 retraction, periodic-input
+phase audits, and raw sibling-fiber evidence through `h=12`. The detailed
+reports below remain provenance records; none makes a center-column or
+infinite-horizon claim.
+
 ## Verified finite-width check
 
 Run `python3 experiments/bitwise_successor_check.py` from the repository root;
