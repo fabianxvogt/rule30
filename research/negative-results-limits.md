@@ -87,6 +87,18 @@ words. Disagreements occupy both first-bit halves at even horizons and one
 half at odd horizons. This observation is empirical and has not been promoted
 to an automated regression or a general theorem.
 
+There is a bounded conditional explanation for this distance law. If `d_h`
+denotes the Hamming distance between a doubleton pair's complete signatures,
+the two first-boundary-bit blocks give
+`d_h = d_{h-1}(tau_0 pair) + d_{h-1}(tau_1 pair)` whenever the siblings have
+the same leading bit. The recorded child-sharing pattern therefore implies
+`d_h = 2d_{h-1}` at even horizons and `d_h = d_{h-1}` at odd horizons `h >= 3`,
+with the explicit base `d_1 = 2`. This derives the displayed formula only
+inside the checked envelope and conditional on those already empirical
+premises; it is not an asymptotic argument. A useful next bounded test would
+record the two child distances for every pair and check this decomposition
+pair by pair, rather than relying on aggregate counts.
+
 The commuting-square and lower-fiber checks also hold throughout this finite
 envelope. These observations describe a bounded zero-padded quotient; they do
 not establish a parity theorem for larger `h`, an infinite-horizon quotient,

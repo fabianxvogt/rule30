@@ -48,6 +48,37 @@ response signatures over all `2^h` boundary words. For every checked horizon
 and one first-bit half at odd horizons. This is an additional finite empirical
 observation, not an automated regression or a parity theorem.
 
+## Bounded review of the distance observation
+
+Let `d_h(c, c')` be the Hamming distance between the complete raw response
+signatures of a doubleton sibling pair at horizon `h`. The signature
+construction splits into two blocks according to the first boundary bit. When
+the siblings have the same leading bit, their common first output contributes
+no disagreement, so the raw construction gives the finite decomposition
+
+```text
+d_h(c, c') = d_{h-1}(tau_0(c), tau_0(c'))
+           + d_{h-1}(tau_1(c), tau_1(c')).
+```
+
+The already-recorded sibling audit then supplies a conditional explanation of
+the observed sequence. At even `h`, both child pairs are distinct members of
+the same lower `rho`-fiber, so both terms are lower sibling distances. At odd
+`h >= 3`, exactly one child is shared and the other distinct child pair is a
+lower sibling pair, so one term is zero. With the explicit `h=1` base distance
+`d_1 = 2`, these finite recurrences yield
+`d_h = 2^(floor(h/2) + 1)` for the horizons already checked.
+
+This is a proof sketch of why the finite table is compatible with the existing
+child-sharing data, not a proof that the child-sharing premises continue past
+`h=13`. No counterexample appears in the checked envelope, and the argument
+does not provide a center-column bridge or an infinite-horizon conclusion.
+
+The clearest next falsifiable check, still within the existing cap, would be to
+record each pair's two child distances and verify this decomposition pair by
+pair. The current audit records only aggregate parity counts, so that check
+has not been added or run here.
+
 ## Exact cross-check and limits
 
 For all 31 encoded states at `h = 0..4`, the raw signatures matched the tuple

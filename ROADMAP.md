@@ -111,3 +111,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: recorded an independent bounded raw-signature observation: each doubleton pair
   differs on exactly `2^(floor(h/2)+1)` boundary words through h=13; no theorem or automated
   regression is claimed. [EMPIRICAL, bounded]
+- 2026-08-25: reviewed the finite signature-distance observation. The existing child-sharing
+  data gives a conditional block-decomposition explanation through h=13, but no counterexample,
+  asymptotic claim, or center-column bridge; a pairwise child-distance check remains the clearest
+  next bounded test. [EMPIRICAL review, bounded]
