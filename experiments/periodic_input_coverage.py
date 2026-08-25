@@ -130,19 +130,31 @@ def analyze_macro_cycle(
         sorted({partition.class_id(cycle_state) for cycle_state in cycle_states})
     )
 
-    def phase_classes(states: Iterable[int]) -> set[int]:
-        classes: set[int] = set()
-        for phase_state in states:
-            current_state = phase_state
-            for boundary_bit in word:
-                classes.add(partition.class_id(current_state))
-                current_state = integer_successor(
-                    current_state, boundary_bit, partition.horizon
-                )
-        return classes
+    # Track the exact phase-lifted process as well as the macro-map.  A raw
+    # state can enter the eventual phase cycle between two macro boundaries,
+    # so expanding every pre-cycle macro state by the whole word can classify
+    # an already-cyclic phase as pre-cycle.
+    phase_first_step: dict[tuple[int, int], int] = {}
+    phase_trajectory: list[tuple[int, int]] = []
+    phase_state = initial_state
+    phase = 0
+    while (phase_state, phase) not in phase_first_step:
+        phase_first_step[(phase_state, phase)] = len(phase_trajectory)
+        phase_trajectory.append((phase_state, phase))
+        phase_state = integer_successor(
+            phase_state, word[phase], partition.horizon
+        )
+        phase = (phase + 1) % len(word)
 
-    precycle_classes = phase_classes(trajectory[:macro_transient_steps])
-    machine_cycle_classes = phase_classes(cycle_states)
+    phase_cycle_start = phase_first_step[(phase_state, phase)]
+    phase_precycle = phase_trajectory[:phase_cycle_start]
+    phase_cycle = phase_trajectory[phase_cycle_start:]
+    precycle_classes = {
+        partition.class_id(state) for state, _ in phase_precycle
+    }
+    machine_cycle_classes = {
+        partition.class_id(state) for state, _ in phase_cycle
+    }
     return MacroCycleObservation(
         horizon=partition.horizon,
         boundary_word=word,

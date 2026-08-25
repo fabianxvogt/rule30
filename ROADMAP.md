@@ -75,3 +75,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   initial-state/word pairs and reports phase-lifted machine-cycle classes;
   word `10` has machine period 8 and visits 7 of 16 classes. [EMPIRICAL,
   bounded; no center-column or infinite-horizon claim]
+- 2026-08-25: independently audited the phase-lifted cycle decomposition through
+  h=7 and primitive word lengths 1..4 (5,610 cases), corrected a mid-word
+  phase-alignment error in pre-cycle class counts, and recorded the minimal
+  h=1 constant-input counterexample to Proposition 13. [EMPIRICAL,
+  INCREMENTAL; bounded]

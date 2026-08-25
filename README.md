@@ -93,7 +93,8 @@ Claims throughout are labeled: `FORMAL` (proved here), `EMPIRICAL` (verified com
 11. **Proposition 13 (period lower bound from coverage) — RETRACTED.** The counting argument
     ("period p implies ≤ p classes visited") fails because a periodically-driven finite machine
     has period L·p where the macro-cycle length L can be as large as 2^h; the corrected bound is
-    vacuous. Concrete counterexample at h=6, word "10": machine period 8, visits 7 classes.
+    vacuous. The smallest witness is h=1, word "1": machine period 2, visits both classes;
+    the nonconstant h=6, word "10" witness has machine period 8 and visits 7 classes.
     The full error analysis and counterexamples are preserved in
     `research/partial-results.md` and `experiments/verify_period_bug.py`.
 
@@ -218,7 +219,7 @@ Highlights (see `experiments/` for the full set of ~117 scripts):
 | `predictive_state_automaton.py` | Coherence of quotient transitions across horizons | Deterministic next-class map holds through horizon 10+ |
 | `predictive_state_trace.py` | Which classes the real trajectory visits | All classes at horizon 10 within 5000 steps |
 | `truncation_period_stability.py` | Do width-K truncation periods converge? | No: 138→510→6258→2722 for K=20..40, p=2 |
-| `periodic_input_coverage.py` | Exact macro-cycle coverage under primitive periodic boundary words | At h=6, word `10` has machine period 8 and visits 7 phase-lifted classes; periods 1..3 checked over 640 initial-state/word pairs |
+| `periodic_input_coverage.py` | Exact macro-cycle coverage under primitive periodic boundary words | At h=1, word `1` already lifts period 1 to machine period 2; h=6, word `10` visits 7 of 16 classes; periods 1..3 checked over 640 initial-state/word pairs |
 | `search_finite_state_observers.py` | Sweep of tiny finite-state observers of c(t) | Only trivial low-complexity candidates |
 | `truncated_right_half_observer.py` | Reconstruction-aware width-limited observers | Raw truncation does not approximate column 1 well enough |
 | `fiber_growth_table.py`, `child_relationship.py` | Fiber structure of ρ_h: S_h → S_{h−1} | Fibers size ≤ 2; even/odd parity pattern in sibling children |

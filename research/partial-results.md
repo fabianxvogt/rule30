@@ -751,9 +751,13 @@ the trajectory visits at most p distinct classes, giving p >= |S_h|.
 length of the p-step macro-map F_w on the state space. L can be much larger than 1. The machine
 state does NOT generally have period p; it has period L·p.
 
-**Concrete counterexample**: At h=6 with period-2 boundary word "10", the machine state has
-period 8 = 4×2 (macro-cycle length L=4). Within one machine period, the trajectory visits 7
-distinct classes, not the ≤2 claimed by the original argument.
+**Concrete counterexamples**: The smallest witness is at h=1 with constant period-1 boundary
+word "1" and initial state 0. The width-1 update is `s(t+1) = 1 xor s(t)`, so the state
+alternates `0, 1, 0, ...`: the input period is 1, but the phase-lifted machine period is 2
+and both finite classes are visited, not the ≤1 claimed by the original argument. A useful
+nonconstant witness is h=6 with period-2 boundary word "10", where the machine period is
+8 = 4×2 (macro-cycle length L=4) and one machine cycle visits 7 distinct classes, not the
+≤2 claimed by the original argument.
 
 Systematic verification (experiments/verify_period_bug.py):
 - h=4, p=2: max L=5 (micro-period 10)
@@ -761,11 +765,13 @@ Systematic verification (experiments/verify_period_bug.py):
 - h=8, p=3: max L=12 (micro-period 36)
 - h=10, p=3: max L=17 (micro-period 51)
 
-**Corrected bound**: The trajectory visits at most T + h + L·p distinct classes, where T is the
-pre-period and L is the macro-cycle length. Since L can be as large as 2^h (the maximum cycle
-length of a map on {0,1}^h), the bound becomes T + h + 2^h, which is always ≥ |S_h| (since
-|S_h| ≤ 2^h by definition). The bound is therefore **vacuous** — it provides no constraint
-on the period p.
+**Corrected bound**: If T is the number of pre-cycle microsteps after the periodic input has
+started, the trajectory visits at most T + L·p distinct classes, where L is the macro-cycle
+length. Equivalently, if T_macro counts complete input periods, use T_macro·p + L·p (up to a
+fixed phase-alignment offset). Using only L ≤ 2^h gives the worst-case envelope
+T + 2^h·p, which dominates |S_h| for p ≥ 1 (since |S_h| ≤ 2^h). The exact T + L·p can be
+informative for a fixed finite machine, but without an independent upper bound on T or L it
+gives no lower bound on p. The coverage-based argument is therefore **vacuous** in general.
 
 **Conclusion**: The Coverage Hypothesis approach, combined with this counting argument, CANNOT
 prove aperiodicity. A fundamentally different argument is needed.

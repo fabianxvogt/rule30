@@ -62,4 +62,7 @@ cycles for primitive periodic boundary words and counts both macro-boundary
 classes and phase-lifted machine-cycle classes. The default h=6, periods 1..3
 run checks 640 finite observations; the h=6 word `10` has machine period 8 and
 visits 7 of 16 phase-lifted classes. This is bounded implementation evidence,
-not a center-column or infinite-horizon result.
+not a center-column or infinite-horizon result. An independent phase-augmented
+audit found the minimal h=1, word `1` period-lift witness and corrected a
+mid-word phase-alignment error in pre-cycle class counting; see the linked
+report for the bounded check envelope.
