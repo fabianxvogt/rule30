@@ -22,6 +22,40 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_omitted_flags_use_bounded_default_without_distances(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+
+        report = subprocess.run(
+            [sys.executable, str(script)],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(report.returncode, 0, report.stderr)
+        self.assertEqual(report.stderr, "")
+        lines = report.stdout.splitlines()
+        self.assertEqual(
+            lines[0],
+            "Bounds: requested max horizon=13; implementation hard cap=13",
+        )
+        self.assertEqual(
+            lines[-1],
+            "Limits: raw tuple-state partitions only; implementation hard cap "
+            "h=13; no claim for larger horizons, an infinite quotient, "
+            "center-column coverage, or periodicity.",
+        )
+        summary_rows = [line for line in lines if line[:2].strip().isdigit()]
+        self.assertEqual(
+            [int(line[:2]) for line in summary_rows], list(range(1, MAX_HORIZON + 1))
+        )
+        self.assertEqual(summary_rows[-1].split()[:4], ["13", "203", "79", "62"])
+        self.assertNotIn("Pairwise raw signature distances", report.stdout)
+
     def test_cli_rejects_non_integer_horizon_contract(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"

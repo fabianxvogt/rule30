@@ -146,3 +146,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   diagnostic coverage before the finite audit can start. The h<=13 cap and existing numeric
   boundary checks remain unchanged; no asymptotic claim was added. [EMPIRICAL, INCREMENTAL;
   bounded]
+- 2026-08-25: locked the omitted-flag sibling-fiber CLI contract with a subprocess regression.
+  The default run succeeds at the existing h=13 bound, emits all finite summary rows, and omits
+  pairwise rows unless `--report-distances` is supplied; no computation above h=13 or asymptotic
+  claim was added. [EMPIRICAL, INCREMENTAL; bounded]
