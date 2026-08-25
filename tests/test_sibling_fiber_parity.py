@@ -22,6 +22,36 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_rejects_non_integer_horizon_contract(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+
+        report = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                "not-an-integer",
+                "--report-distances",
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(report.returncode, 2)
+        self.assertEqual(report.stdout, "")
+        self.assertEqual(
+            report.stderr,
+            """usage: sibling_fiber_parity.py [-h] [--max-horizon MAX_HORIZON]
+                               [--report-distances]
+sibling_fiber_parity.py: error: argument --max-horizon: invalid int value: 'not-an-integer'
+""",
+        )
+
     def test_cli_rejects_negative_horizon_contract(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"

@@ -141,3 +141,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   `h=-1` now has explicit status-2, empty-stdout, and `[0, 13]` validation coverage before any
   finite audit starts. The h=0, h=3, h=13, and h=14 checks and the h<=13 cap remain unchanged;
   no asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: added an exact subprocess regression for a malformed horizon token:
+  `--max-horizon not-an-integer` now has status-2, empty-stdout, and stable `argparse` usage and
+  diagnostic coverage before the finite audit can start. The h<=13 cap and existing numeric
+  boundary checks remain unchanged; no asymptotic claim was added. [EMPIRICAL, INCREMENTAL;
+  bounded]

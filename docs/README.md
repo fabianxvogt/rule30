@@ -107,5 +107,6 @@ for every pair through `h = 13`.
 
 The [CLI contract report](agent-wave-2026-08-25-cli-contract.md) adds a
 subprocess regression for the documented distance-report command and the
-pre-audit over-cap rejection. It checks command-boundary reproducibility
-without computing beyond `h = 13`.
+pre-audit over-cap rejection. The [non-integer horizon report](agent-wave-2026-08-25-non-integer-horizon-cli.md)
+adds the malformed-token parser boundary. Together they check
+command-boundary reproducibility without computing beyond `h = 13`.
