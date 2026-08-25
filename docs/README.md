@@ -66,3 +66,8 @@ not a center-column or infinite-horizon result. An independent phase-augmented
 audit found the minimal h=1, word `1` period-lift witness and corrected a
 mid-word phase-alignment error in pre-cycle class counting; see the linked
 report for the bounded check envelope.
+
+The [phase-coverage compatibility report](agent-wave-2026-08-25-phase-coverage-compatibility.md)
+records a bounded nonconstant periodic-driver witness whose phase-lifted cycle
+visits every class at `h=3`; it is an incremental finite consistency result,
+not a center-column claim.

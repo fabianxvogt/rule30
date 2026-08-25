@@ -80,3 +80,9 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   phase-alignment error in pre-cycle class counts, and recorded the minimal
   h=1 constant-input counterexample to Proposition 13. [EMPIRICAL,
   INCREMENTAL; bounded]
+- 2026-08-25: bounded phase-coverage consistency probe found a primitive
+  period-2 word (`01`) whose h=3 phase-lifted eventual cycle visits all five
+  finite predictive classes, while macro-boundary samples see four. This is
+  incremental empirical evidence against repairing Proposition 13 by requiring
+  periodic drivers to miss a class; no center-column claim. [EMPIRICAL,
+  INCREMENTAL; bounded]

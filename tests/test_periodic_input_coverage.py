@@ -65,6 +65,16 @@ class PeriodicInputCoverageTests(unittest.TestCase):
         self.assertEqual(observation.cycle_class_count, 2)
         self.assertEqual(observation.machine_cycle_classes, (0, 1))
 
+    def test_phase_lifted_cycle_can_cover_every_class_at_horizon_three(self):
+        observation = analyze_macro_cycle(predictive_partition(3), (0, 1), 0)
+        self.assertEqual(observation.macro_transient_steps, 0)
+        self.assertEqual(observation.macro_cycle_steps, 4)
+        self.assertEqual(observation.machine_period, 8)
+        self.assertEqual(observation.total_classes, 5)
+        self.assertEqual(observation.macro_cycle_class_count, 4)
+        self.assertEqual(observation.cycle_class_count, 5)
+        self.assertEqual(observation.machine_cycle_classes, (0, 1, 2, 3, 4))
+
     def test_envelope_is_bounded_and_reports_separate_cycle_coverage(self):
         observations = coverage_envelope(3, 2, initial_states=(0, 1))
         self.assertEqual(len(observations), 8)
