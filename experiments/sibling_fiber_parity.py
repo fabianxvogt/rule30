@@ -280,7 +280,20 @@ def _pairwise_distance_report(
             )
         reports.append(report)
 
-    return tuple(reports)
+    # Make the externally visible finite report independent of the internal
+    # partition/fiber construction order.  The raw states are the canonical
+    # identifiers for these rows, and the explicit key also keeps the order
+    # stable if the bounded grouping implementation is refactored later.
+    return tuple(
+        sorted(
+            reports,
+            key=lambda report: (
+                report.horizon,
+                report.first_state,
+                report.second_state,
+            ),
+        )
+    )
 
 
 def _summarize(

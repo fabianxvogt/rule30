@@ -128,3 +128,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   h=13 cap through a subprocess, checking the h=13 `203 / 79 / 62` row, and making the output
   identify both the requested run bound and the implementation hard cap. h=14 remains rejected
   before computation; no horizon above h=13 is run. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: made the bounded sibling-fiber text report reproducible by canonically sorting
+  pair rows by horizon and raw state tuples, and locking a byte-for-byte h=3 CLI snapshot. The
+  h=13 subprocess cap and finite-limit wording remain covered; no computation beyond h=13 or
+  asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]

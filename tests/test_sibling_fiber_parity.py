@@ -44,12 +44,25 @@ class SiblingFiberParityTests(unittest.TestCase):
         )
         self.assertEqual(report.returncode, 0, report.stderr)
         self.assertEqual(report.stderr, "")
-        self.assertIn(
-            "Pairwise raw signature distances (exact within bound)",
+        self.assertEqual(
             report.stdout,
+            """Bounds: requested max horizon=3; implementation hard cap=13
+Raw sibling-fiber parity check (EMPIRICAL; exact within bound)
+h |S_h| n1 n2 same-ell share-tau0 share-tau1 share-both share-neither coll0 coll1
+-- ----- -- -- --------- ---------- ---------- ---------- ------------ ----- -----
+ 1     2  0  1         0          1          1          1            0     1     1
+ 2     3  1  1         1          0          0          0            1     0     0
+ 3     5  1  2         2          1          1          0            0     1     1
+
+Pairwise raw signature distances (exact within bound)
+h first-state second-state leading-equal full d0 d1
+ 1 (0,) (1,)             0    2  0  0
+ 2 (0, 0) (0, 1)             1    4  2  2
+ 3 (0, 0, 0) (0, 0, 1)             1    4  4  0
+ 3 (1, 0, 0) (1, 0, 1)             1    4  0  4
+Limits: raw tuple-state partitions only; implementation hard cap h=13; no claim for larger horizons, an infinite quotient, center-column coverage, or periodicity.
+""",
         )
-        self.assertIn(" 3 (0, 0, 0) (0, 0, 1)", report.stdout)
-        self.assertIn("hard cap h=13", report.stdout)
 
         over_cap = subprocess.run(
             [

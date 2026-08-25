@@ -78,7 +78,10 @@ does not provide a center-column bridge or an infinite-horizon conclusion.
 
 The follow-up pairwise check is now implemented in the same bounded raw audit.
 It records each doubleton pair's full distance and both child distances, while
-preserving the `h=1` leading-bit exception explicitly. See the
+preserving the `h=1` leading-bit exception explicitly. Pair records are
+canonically ordered by `(horizon, first_state, second_state)` before they are
+returned or printed, so the finite text report does not rely on partition
+dictionary insertion order. See the
 [pairwise child-distance report](agent-wave-2026-08-25-child-distance-decomposition.md)
 for the exact table and reproduction command.
 
