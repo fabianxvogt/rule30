@@ -21,10 +21,10 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   C generator makes ~10^8 bits feasible).
 - [x] Write up the negative results and limits: the vacuity of coverage-based counting bounds
   after the Proposition 13 correction, periodic-input phase audits, and raw sibling-fiber
-  evidence through `h=12` (`research/negative-results-limits.md`).
+  evidence through `h=13` (`research/negative-results-limits.md`).
 - Prove or refute the Coverage Hypothesis (all S_h classes visited) — now interesting in its
   own right, independent of the counting argument.
-- Keep the bounded raw sibling-fiber parity check at its explicit h=12 cap; no infinite claim is
+- Keep the bounded raw sibling-fiber parity check at its explicit h=13 cap; no infinite claim is
   implied.
 
 ## Later
@@ -97,3 +97,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   enumerates at most 4096 raw states, preserves the h≤11 table, and adds a tuple-reference
   regression through h=4; no infinite-horizon or center-column claim is implied.
   [EMPIRICAL, bounded]
+- 2026-08-25: extended the independent raw sibling-fiber audit by exactly one bounded step to
+  h=13 after a 55.63-second / 252,231,680-byte peak-RSS preflight. The new row has 203 classes,
+  79 singleton and 62 doubleton fibers, and preserves the odd-horizon one-child-sharing parity;
+  no qualitative parity change or infinite-horizon claim is implied. [EMPIRICAL, bounded]

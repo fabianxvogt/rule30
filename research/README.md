@@ -13,6 +13,6 @@ Suggested workflow:
 
 [`negative-results-limits.md`](negative-results-limits.md) reconciles the
 Proposition 13 retraction, the periodic-input phase audits, and the raw
-sibling-fiber audit through `h=12`. It is the concise entry point for the
+sibling-fiber audit through `h=13`. It is the concise entry point for the
 negative-result boundary; the linked reports retain exact tables and
 reproduction commands.

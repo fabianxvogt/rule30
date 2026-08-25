@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from itertools import product
 
 
-MAX_HORIZON = 12
+MAX_HORIZON = 13
 MAX_RAW_STATES = 1 << MAX_HORIZON
 
 
@@ -369,7 +369,7 @@ def main() -> None:
             f"{summary.rho_tau0_collisions:5d} {summary.rho_tau1_collisions:5d}"
         )
     print(
-        "Limits: raw tuple-state partitions only; hard cap h=12; no claim "
+        "Limits: raw tuple-state partitions only; hard cap h=13; no claim "
         "for larger horizons, an infinite quotient, center-column coverage, "
         "or periodicity."
     )

@@ -57,12 +57,14 @@ These results are finite compatibility and counterexample evidence. The
 bound; the `h=3` witness prevents promoting “periodic inputs miss a class” to
 a general finite rule.
 
-## 3. Raw sibling-fiber evidence through `h=12`
+## 3. Raw sibling-fiber evidence through `h=13`
 
 The independent raw tuple-state audit exhaustively rebuilds the finite
 response signatures and the maps `rho_h`, `tau_0`, and `tau_1` through the
-explicit cap `h=12` (at most `2^12 = 4096` raw states). At `h=12`, it finds
-`|S_12| = 141`, with `67` singleton and `37` doubleton truncation fibers.
+explicit cap `h=13` (at most `2^13 = 8192` raw states). At `h=13`, it finds
+`|S_13| = 203`, with `79` singleton and `62` doubleton truncation fibers.
+The cap preflight used 55.63 seconds wall time and 252,231,680 bytes peak
+resident memory on the audit machine.
 Across the checked envelope:
 
 - every truncation fiber has size at most two;
@@ -71,6 +73,11 @@ Across the checked envelope:
   exactly one child; and
 - the `h=1` row is a genuine degenerate exception: both children collapse to
   the unique `S_0` class and the two siblings have opposite leading bits.
+
+The h=13 row produces no qualitative parity change: its 62 odd-horizon
+doubletons split evenly between sharing `tau_0` and `tau_1` (31 each), with no
+share-both or share-neither pairs; the two collision counts are also 31 and
+31.
 
 The commuting-square and lower-fiber checks also hold throughout this finite
 envelope. These observations describe a bounded zero-padded quotient; they do

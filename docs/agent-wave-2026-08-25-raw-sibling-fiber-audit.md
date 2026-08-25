@@ -8,8 +8,9 @@ simulation, then derives `rho_h` by dropping the rightmost state bit and
 `tau_0`, `tau_1` by applying one raw Rule 30 update before dropping that bit.
 It does not call the package's nested-map, fiber, or partition helpers.
 
-The explicit hard cap is now `h = 12`; the run enumerates at most `2^12 = 4096`
-raw states and completed in 13.25 seconds in the recorded run. Every checked
+The explicit hard cap is now `h = 13`; the run enumerates at most `2^13 = 8192`
+raw states. A preflight at the new cap completed in 55.63 seconds with a peak
+resident set size of 252,231,680 bytes on the audit machine. Every checked
 truncation fiber had size at most two;
 the commuting squares, same-leading-bit sibling check, and parity assertions
 also held throughout the bound.
@@ -28,15 +29,24 @@ also held throughout the bound.
 | 10 | 71 | 33 | 19 | 19 | 0 | 0 | 0 | 19 | 0 | 0 |
 | 11 | 104 | 38 | 33 | 33 | 15 | 18 | 0 | 0 | 15 | 18 |
 | 12 | 141 | 67 | 37 | 37 | 0 | 0 | 0 | 37 | 0 | 0 |
+| 13 | 203 | 79 | 62 | 62 | 31 | 31 | 0 | 0 | 31 | 31 |
 
 Here `n1`/`n2` count singleton/doubleton `rho` fibers, and `coll0`/`coll1`
 count redundant entries in `(rho, tau_0)` / `(rho, tau_1)`.
+
+The h=13 row shows no qualitative parity change: as at the earlier odd
+horizons, every doubleton sibling pair shares exactly one child, with 31 pairs
+sharing `tau_0` and 31 sharing `tau_1`; no pair shares both or neither, and the
+two collision counts match those directions. The same-leading-bit condition
+also continues to hold for all 62 doubleton pairs.
 
 ## Exact cross-check and limits
 
 For all 31 encoded states at `h = 0..4`, the raw signatures matched the tuple
 reference in `experiments/right_half_response_classes.py`; the regression keeps
-this explicit cross-check. The compact h=12 signatures preserve lexicographic
+this explicit cross-check. A separate focused regression also compares the
+compact raw signatures with the direct tuple-state signatures through `h = 5`.
+The compact h=13 signatures preserve lexicographic
 boundary-word order, while the package's integer helper uses a different order.
 Comparing flattened arrays without aligning words therefore remains an invalid
 cross-check and previously produced a false alarm at `h=2`.
@@ -44,9 +54,9 @@ cross-check and previously produced a false alarm at `h=2`.
 Reproduce the audit with:
 
 ```text
-PYTHONDONTWRITEBYTECODE=1 python3 experiments/sibling_fiber_parity.py --max-horizon 12
+PYTHONDONTWRITEBYTECODE=1 python3 experiments/sibling_fiber_parity.py --max-horizon 13
 ```
 
 The result is **EMPIRICAL / INCREMENTAL** and exact only for the finite envelope
-`0 <= h <= 12`. It makes no claim for larger horizons, an infinite quotient,
+`0 <= h <= 13`. It makes no claim for larger horizons, an infinite quotient,
 center-column coverage, or periodicity.

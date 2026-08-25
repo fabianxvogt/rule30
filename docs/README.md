@@ -11,7 +11,7 @@ Never store credentials, private data, generated output, logs, datasets, or buil
 The concise cross-report note
 [`research/negative-results-limits.md`](../research/negative-results-limits.md)
 is the current entry point for the Proposition 13 retraction, periodic-input
-phase audits, and raw sibling-fiber evidence through `h=12`. The detailed
+phase audits, and raw sibling-fiber evidence through `h=13`. The detailed
 reports below remain provenance records; none makes a center-column or
 infinite-horizon claim.
 
@@ -89,7 +89,7 @@ regression, not an asymptotic or center-column claim.
 
 The [raw sibling-fiber audit report](agent-wave-2026-08-25-raw-sibling-fiber-audit.md)
 records an exact raw tuple-state check of the finite `rho_h` fibers and
-`tau_0`/`tau_1` child maps through `h = 12`. It empirically checks the even/odd
+`tau_0`/`tau_1` child maps through `h = 13`. It empirically checks the even/odd
 child-sharing pattern in that envelope and records the degenerate `h = 1`
 exception. The script has an explicit raw-state cap and makes no
 infinite-horizon, center-column, or eventual-coverage claim.
