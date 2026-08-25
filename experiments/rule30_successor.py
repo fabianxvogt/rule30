@@ -57,7 +57,7 @@ def _validate_state(state: int, horizon: int) -> None:
 def _validate_boundary_bit(boundary_bit: int) -> None:
     """Validate one binary boundary input."""
 
-    if boundary_bit not in (0, 1):
+    if type(boundary_bit) is not int or boundary_bit not in (0, 1):
         raise ValueError(f"boundary_bit must be 0 or 1; got {boundary_bit}")
 
 

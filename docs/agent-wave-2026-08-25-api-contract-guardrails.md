@@ -9,10 +9,11 @@ non-binary boundary value could alter the transition, and empty boundary words
 allowed `evolve_integer_state` and `response_trace` to skip all validation.
 
 The shared finite-domain checks now require a non-negative integer horizon, an
-integer state in `0 <= state < 2**horizon`, and a boundary bit equal to `0` or
-`1`. The checks run before consuming an iterable, so invalid initial inputs
-cannot be hidden behind an empty word. Valid transitions are unchanged; the
-existing checker and the independent raw h=13 audit retain their contracts.
+integer state in `0 <= state < 2**horizon`, and an actual integer boundary bit
+equal to `0` or `1` (booleans are rejected). The checks run before consuming an
+iterable, so invalid initial inputs cannot be hidden behind an empty word.
+Valid transitions are unchanged; the existing checker and the independent raw
+h=13 audit retain their contracts.
 
 ## Bounded evidence
 

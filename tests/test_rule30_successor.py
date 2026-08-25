@@ -507,6 +507,7 @@ class IntegerSuccessorTests(unittest.TestCase):
             (8, 0, 3),
             (-1, 0, 3),
             (0, 2, 3),
+            (0, True, 3),
         )
         for state, boundary_bit, horizon in invalid_successor_inputs:
             with self.subTest(
