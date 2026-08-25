@@ -80,7 +80,7 @@ regression, not an asymptotic or center-column claim.
 
 The [sibling-fiber parity report](agent-wave-2026-08-25-sibling-fiber-parity.md)
 records an exact dependency-free check of the finite `rho_h` fibers and
-`tau_0`/`tau_1` child maps through `h = 10`. It confirms the even/odd
+`tau_0`/`tau_1` child maps through `h = 11`. It empirically checks the even/odd
 child-sharing pattern in that envelope and records the degenerate `h = 1`
 exception. The script has a hard horizon cap and makes no infinite-horizon,
 center-column, or eventual-coverage claim.

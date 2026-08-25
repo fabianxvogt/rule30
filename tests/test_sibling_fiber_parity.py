@@ -7,7 +7,7 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
-    def test_exact_bounded_table_through_horizon_ten(self) -> None:
+    def test_empirical_bounded_table_through_horizon_eleven(self) -> None:
         summaries = analyze(MAX_HORIZON)
         expected = (
             # h, |S_h|, n1, n2, same ell, share tau0, share tau1,
@@ -22,6 +22,7 @@ class SiblingFiberParityTests(unittest.TestCase):
             (8, 35, 15, 10, 10, 0, 0, 0, 10, 0, 0),
             (9, 52, 18, 17, 17, 8, 9, 0, 0, 8, 9),
             (10, 71, 33, 19, 19, 0, 0, 0, 19, 0, 0),
+            (11, 104, 38, 33, 33, 15, 18, 0, 0, 15, 18),
         )
         actual = tuple(
             (
@@ -54,6 +55,7 @@ class SiblingFiberParityTests(unittest.TestCase):
         self.assertEqual(nested[1], (0, 0))
 
     def test_experiment_has_a_hard_horizon_cap(self) -> None:
+        self.assertEqual(MAX_HORIZON, 11)
         with self.assertRaises(ValueError):
             analyze(MAX_HORIZON + 1)
         with self.assertRaises(ValueError):

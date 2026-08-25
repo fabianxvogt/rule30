@@ -22,7 +22,7 @@ if str(ROOT) not in sys.path:
 from rule30 import PredictivePartition, predictive_partition
 
 
-MAX_HORIZON = 10
+MAX_HORIZON = 11
 
 
 @dataclass(frozen=True)
@@ -235,7 +235,7 @@ def main() -> None:
     except ValueError as error:
         parser.error(str(error))
 
-    print("Finite sibling-fiber parity check (exact; bounded)")
+    print("Finite sibling-fiber parity check (EMPIRICAL; exact within bound)")
     print(
         "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
         "share-both share-neither coll0 coll1"
@@ -254,7 +254,7 @@ def main() -> None:
             f"{summary.rho_tau0_collisions:5d} {summary.rho_tau1_collisions:5d}"
         )
     print(
-        "Limits: finite predictive partitions only; no claim for h>10, "
+        "Limits: finite predictive partitions only; no claim for h>11, "
         "the infinite quotient, center-column coverage, or periodicity."
     )
 
