@@ -105,3 +105,6 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   h=13 after a 55.63-second / 252,231,680-byte peak-RSS preflight. The new row has 203 classes,
   79 singleton and 62 doubleton fibers, and preserves the odd-horizon one-child-sharing parity;
   no qualitative parity change or infinite-horizon claim is implied. [EMPIRICAL, bounded]
+- 2026-08-25: corrected the public fast-coverage reproduction command to pass an explicit h=13
+  bound and the tracked 100,001-bit fixture; the bounded run covered all 203 classes at step
+  9,742. [EMPIRICAL, INCREMENTAL]

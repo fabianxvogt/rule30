@@ -154,7 +154,8 @@ python3 experiments/right_half_response_classes.py --horizon 8
 python3 experiments/predictive_state_automaton.py --max-horizon 9
 python3 experiments/predictive_state_trace.py --input results/center-column-1000000.txt --horizon 10 --steps 5000
 python3 experiments/predictive_state_growth.py            # |S_h| through h≈21 in minutes
-python3 experiments/fast_class_coverage2.py               # full coverage census, h ≤ 22
+python3 experiments/fast_class_coverage2.py --horizon 13 --file results/center-column-100000.txt
+                                                            # bounded coverage trace at h=13
 ```
 
 ## Bounded Python API
