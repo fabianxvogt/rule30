@@ -52,3 +52,14 @@ records its bounded evidence and limits. The partition builder uses a finite
 recursive lower-horizon key while
 still enumerating every bounded state; it remains an exponential small-check
 tool, not an infinite-horizon construction.
+
+## Periodic boundary macro-cycles
+
+[`agent-wave-2026-08-25-periodic-input-coverage.md`](agent-wave-2026-08-25-periodic-input-coverage.md)
+documents the exact finite experiment in
+`experiments/periodic_input_coverage.py`. It computes transient and eventual
+cycles for primitive periodic boundary words and counts both macro-boundary
+classes and phase-lifted machine-cycle classes. The default h=6, periods 1..3
+run checks 640 finite observations; the h=6 word `10` has machine period 8 and
+visits 7 of 16 phase-lifted classes. This is bounded implementation evidence,
+not a center-column or infinite-horizon result.

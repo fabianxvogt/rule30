@@ -70,3 +70,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: promoted the finite first-visit coverage profile from `fast_class_coverage2.py`, exhaustively checked for every state and boundary word through h = 6 and word lengths 0..4; it reports only the supplied finite trajectory and makes no center-column or eventual-coverage claim. [EMPIRICAL implementation check]
 - 2026-08-25: reconciled the public-publication checkbox with the verified GitHub
   remote and push-clean state. [EMPIRICAL publication check]
+- 2026-08-25: added an exact finite macro-cycle coverage experiment for primitive
+  periodic boundary words. The default h=6, periods 1..3 run covers 640
+  initial-state/word pairs and reports phase-lifted machine-cycle classes;
+  word `10` has machine period 8 and visits 7 of 16 classes. [EMPIRICAL,
+  bounded; no center-column or infinite-horizon claim]
