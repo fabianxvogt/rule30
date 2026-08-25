@@ -71,6 +71,27 @@ class SiblingFiberParityTests(unittest.TestCase):
             over_cap.stderr,
         )
 
+        at_cap = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                str(MAX_HORIZON),
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(at_cap.returncode, 0, at_cap.stderr)
+        self.assertEqual(at_cap.stderr, "")
+        self.assertIn(
+            "Bounds: requested max horizon=13; implementation hard cap=13",
+            at_cap.stdout,
+        )
+        self.assertIn("13   203 79 62", at_cap.stdout)
+
     def test_empirical_bounded_table_through_horizon_thirteen(self) -> None:
         result = audit(MAX_HORIZON)
         summaries = result.summaries

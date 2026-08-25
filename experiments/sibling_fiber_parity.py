@@ -498,6 +498,10 @@ def main() -> None:
         parser.error(str(error))
     summaries = result.summaries
 
+    print(
+        "Bounds: requested max horizon="
+        f"{args.max_horizon}; implementation hard cap={MAX_HORIZON}"
+    )
     print("Raw sibling-fiber parity check (EMPIRICAL; exact within bound)")
     print(
         "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
@@ -527,7 +531,8 @@ def main() -> None:
                 f"{report.child_distance_1:2d}"
             )
     print(
-        "Limits: raw tuple-state partitions only; hard cap h=13; no claim "
+        "Limits: raw tuple-state partitions only; implementation hard cap "
+        f"h={MAX_HORIZON}; no claim "
         "for larger horizons, an infinite quotient, center-column coverage, "
         "or periodicity."
     )

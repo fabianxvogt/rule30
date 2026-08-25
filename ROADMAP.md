@@ -124,3 +124,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   distance report must include the explicit h=13 limit, while h=14 is rejected before the audit
   starts. This closes command-boundary reproducibility coverage without computing beyond h=13.
   [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: tightened the sibling-fiber CLI boundary contract by exercising the exact accepted
+  h=13 cap through a subprocess, checking the h=13 `203 / 79 / 62` row, and making the output
+  identify both the requested run bound and the implementation hard cap. h=14 remains rejected
+  before computation; no horizon above h=13 is run. [EMPIRICAL, INCREMENTAL; bounded]
