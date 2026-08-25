@@ -22,6 +22,41 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_zero_horizon_contract(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+
+        report = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                "0",
+                "--report-distances",
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(report.returncode, 0, report.stderr)
+        self.assertEqual(report.stderr, "")
+        self.assertEqual(
+            report.stdout,
+            """Bounds: requested max horizon=0; implementation hard cap=13
+Raw sibling-fiber parity check (EMPIRICAL; exact within bound)
+h |S_h| n1 n2 same-ell share-tau0 share-tau1 share-both share-neither coll0 coll1
+-- ----- -- -- --------- ---------- ---------- ---------- ------------ ----- -----
+
+Pairwise raw signature distances (exact within bound)
+h first-state second-state leading-equal full d0 d1
+Limits: raw tuple-state partitions only; implementation hard cap h=13; no claim for larger horizons, an infinite quotient, center-column coverage, or periodicity.
+""",
+        )
+
     def test_cli_report_and_cap_contract(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"

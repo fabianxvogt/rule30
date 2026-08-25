@@ -132,3 +132,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   pair rows by horizon and raw state tuples, and locking a byte-for-byte h=3 CLI snapshot. The
   h=13 subprocess cap and finite-limit wording remain covered; no computation beyond h=13 or
   asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: locked the lower CLI boundary with a byte-for-byte `h=0` report snapshot. The
+  empty finite audit now has explicit subprocess coverage: it emits stable bounds, headers, and
+  limits with no horizon or pair rows, while the existing h=3 snapshot and h=13/h=14 boundary
+  checks remain unchanged. No computation beyond h=13 or asymptotic claim was added. [EMPIRICAL,
+  INCREMENTAL; bounded]
