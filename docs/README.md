@@ -110,3 +110,9 @@ subprocess regression for the documented distance-report command and the
 pre-audit over-cap rejection. The [non-integer horizon report](agent-wave-2026-08-25-non-integer-horizon-cli.md)
 adds the malformed-token parser boundary. Together they check
 command-boundary reproducibility without computing beyond `h = 13`.
+
+The [bounded report reproducibility report](agent-wave-2026-08-25-report-reproducibility.md)
+audits default and distance-reporting output across fixed Python hash seeds
+and script/module invocation forms. Its exact regression uses `h = 3` for
+fast matrix coverage while the manual audit confirms the same bytes through
+the existing `h = 13` cap.

@@ -104,6 +104,52 @@ class SiblingFiberParityTests(unittest.TestCase):
             sum(line[:2].strip() == str(MAX_HORIZON) for line in pair_rows), 62
         )
 
+    def test_cli_bounded_reports_are_seed_and_invocation_stable(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        expected = {
+            False: (
+                700,
+                "450388b40f3cc1c1ad85482067c3a8cdfa39da2b7a4637d9760a02ed52319063",
+            ),
+            True: (
+                983,
+                "f31ad843c1a021d7555f23c28958025764630113e789a74a9d692b22f95af0aa",
+            ),
+        }
+
+        for seed in ("0", "42"):
+            for invocation in (
+                [sys.executable, str(script)],
+                [sys.executable, "-m", "experiments.sibling_fiber_parity"],
+            ):
+                for report_distances in (False, True):
+                    command = invocation + ["--max-horizon", "3"]
+                    if report_distances:
+                        command.append("--report-distances")
+                    environment = os.environ.copy()
+                    environment.update(
+                        PYTHONDONTWRITEBYTECODE="1", PYTHONHASHSEED=seed
+                    )
+                    report = subprocess.run(
+                        command,
+                        cwd=repository_root,
+                        env=environment,
+                        capture_output=True,
+                        text=False,
+                        check=False,
+                    )
+                    self.assertEqual(report.returncode, 0, report.stderr)
+                    self.assertEqual(report.stderr, b"")
+                    self.assertEqual(
+                        (len(report.stdout), hashlib.sha256(report.stdout).hexdigest()),
+                        expected[report_distances],
+                        msg=(
+                            f"seed={seed}, invocation={invocation}, "
+                            f"report_distances={report_distances}"
+                        ),
+                    )
+
     def test_cli_rejects_non_integer_horizon_contract(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"

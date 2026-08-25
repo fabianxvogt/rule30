@@ -155,3 +155,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   The over-cap regression now includes the distance switch and still rejects h=14 with empty
   stdout before the audit starts. Omitted and explicit h=13 invocations were byte-identical;
   no asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: audited default and distance-reporting reports across script/module invocation
+  forms and fixed Python hash seeds 0 and 42 at h=13; both modes were byte-identical across the
+  matrix. Added an exact h=3 subprocess regression covering the same matrix, with no computation
+  above h=13 and no asymptotic claim. [EMPIRICAL, INCREMENTAL; bounded]
