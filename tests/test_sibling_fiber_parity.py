@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from collections import Counter
 from itertools import product
+import os
+from pathlib import Path
+import subprocess
+import sys
 import unittest
 
 from experiments.right_half_response_classes import state_signature
@@ -18,6 +22,55 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_report_and_cap_contract(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+
+        report = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                "3",
+                "--report-distances",
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(report.returncode, 0, report.stderr)
+        self.assertEqual(report.stderr, "")
+        self.assertIn(
+            "Pairwise raw signature distances (exact within bound)",
+            report.stdout,
+        )
+        self.assertIn(" 3 (0, 0, 0) (0, 0, 1)", report.stdout)
+        self.assertIn("hard cap h=13", report.stdout)
+
+        over_cap = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                str(MAX_HORIZON + 1),
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(over_cap.returncode, 2)
+        self.assertEqual(over_cap.stdout, "")
+        self.assertIn(
+            f"horizon must be an integer in [0, {MAX_HORIZON}]",
+            over_cap.stderr,
+        )
+
     def test_empirical_bounded_table_through_horizon_thirteen(self) -> None:
         result = audit(MAX_HORIZON)
         summaries = result.summaries

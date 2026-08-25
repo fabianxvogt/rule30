@@ -119,3 +119,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   doubleton pairs through h=13 are compared; the h=1 unequal-leading-bit case is preserved as an
   explicit exception, and all 201 pairs for h>=2 satisfy the finite decomposition. [EMPIRICAL,
   INCREMENTAL; bounded]
+- 2026-08-25: added a subprocess regression for the documented sibling-fiber CLI: a bounded
+  distance report must include the explicit h=13 limit, while h=14 is rejected before the audit
+  starts. This closes command-boundary reproducibility coverage without computing beyond h=13.
+  [EMPIRICAL, INCREMENTAL; bounded]

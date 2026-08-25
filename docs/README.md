@@ -104,3 +104,8 @@ extends that bounded audit with an exact comparison of every doubleton pair's
 full signature distance against both child distances. It records the explicit
 `h = 1` leading-bit exception and verifies the equal-leading-bit decomposition
 for every pair through `h = 13`.
+
+The [CLI contract report](agent-wave-2026-08-25-cli-contract.md) adds a
+subprocess regression for the documented distance-report command and the
+pre-audit over-cap rejection. It checks command-boundary reproducibility
+without computing beyond `h = 13`.
