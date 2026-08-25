@@ -150,3 +150,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   The default run succeeds at the existing h=13 bound, emits all finite summary rows, and omits
   pairwise rows unless `--report-distances` is supplied; no computation above h=13 or asymptotic
   claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: pinned the default `--report-distances` CLI report as an exact 20,758-byte finite
+  snapshot: 202 summary pair rows, including 62 at h=13, and no displayed horizon above h=13.
+  The over-cap regression now includes the distance switch and still rejects h=14 with empty
+  stdout before the audit starts. Omitted and explicit h=13 invocations were byte-identical;
+  no asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]

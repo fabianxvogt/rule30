@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import hashlib
 from itertools import product
 import os
 from pathlib import Path
@@ -55,6 +56,53 @@ class SiblingFiberParityTests(unittest.TestCase):
         )
         self.assertEqual(summary_rows[-1].split()[:4], ["13", "203", "79", "62"])
         self.assertNotIn("Pairwise raw signature distances", report.stdout)
+
+    def test_cli_default_distance_report_is_exact_and_cap_bounded(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment.update(PYTHONDONTWRITEBYTECODE="1", PYTHONHASHSEED="0")
+
+        report = subprocess.run(
+            [sys.executable, str(script), "--report-distances"],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(report.returncode, 0, report.stderr)
+        self.assertEqual(report.stderr, "")
+        self.assertEqual(
+            hashlib.sha256(report.stdout.encode("utf-8")).hexdigest(),
+            "1c2e5f3ec1cb6f7de7de55a2d167ef4912128f3da0bc9135f6646dc0631981d4",
+        )
+
+        lines = report.stdout.splitlines()
+        summary_header = lines.index(
+            "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
+            "share-both share-neither coll0 coll1"
+        )
+        pair_section = lines.index(
+            "Pairwise raw signature distances (exact within bound)"
+        )
+        pair_header = lines.index("h first-state second-state leading-equal full d0 d1")
+        summary_rows = [
+            line
+            for line in lines[summary_header + 2 : pair_section]
+            if line[:2].strip().isdigit()
+        ]
+        pair_rows = [
+            line for line in lines[pair_header + 1 : -1] if line[:2].strip().isdigit()
+        ]
+        self.assertEqual(len(summary_rows), MAX_HORIZON)
+        self.assertEqual(len(pair_rows), 202)
+        self.assertEqual(
+            max(int(line[:2]) for line in summary_rows + pair_rows), MAX_HORIZON
+        )
+        self.assertEqual(
+            sum(line[:2].strip() == str(MAX_HORIZON) for line in pair_rows), 62
+        )
 
     def test_cli_rejects_non_integer_horizon_contract(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
@@ -196,6 +244,7 @@ Limits: raw tuple-state partitions only; implementation hard cap h=13; no claim 
                 str(script),
                 "--max-horizon",
                 str(MAX_HORIZON + 1),
+                "--report-distances",
             ],
             cwd=repository_root,
             env=environment,
