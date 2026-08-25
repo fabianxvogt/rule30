@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from itertools import product
 import unittest
 
-from experiments.sibling_fiber_parity import MAX_HORIZON, analyze
+from experiments.right_half_response_classes import state_signature
+from experiments.sibling_fiber_parity import MAX_HORIZON, analyze, raw_signature
 from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
-    def test_empirical_bounded_table_through_horizon_eleven(self) -> None:
+    def test_empirical_bounded_table_through_horizon_twelve(self) -> None:
         summaries = analyze(MAX_HORIZON)
         expected = (
             # h, |S_h|, n1, n2, same ell, share tau0, share tau1,
@@ -23,6 +25,7 @@ class SiblingFiberParityTests(unittest.TestCase):
             (9, 52, 18, 17, 17, 8, 9, 0, 0, 8, 9),
             (10, 71, 33, 19, 19, 0, 0, 0, 19, 0, 0),
             (11, 104, 38, 33, 33, 15, 18, 0, 0, 15, 18),
+            (12, 141, 67, 37, 37, 0, 0, 0, 37, 0, 0),
         )
         actual = tuple(
             (
@@ -55,11 +58,21 @@ class SiblingFiberParityTests(unittest.TestCase):
         self.assertEqual(nested[1], (0, 0))
 
     def test_experiment_has_a_hard_horizon_cap(self) -> None:
-        self.assertEqual(MAX_HORIZON, 11)
+        self.assertEqual(MAX_HORIZON, 12)
         with self.assertRaises(ValueError):
             analyze(MAX_HORIZON + 1)
         with self.assertRaises(ValueError):
             analyze(-1)
+        with self.assertRaises(ValueError):
+            raw_signature((), MAX_HORIZON + 1)
+
+    def test_raw_signature_matches_explicit_tuple_reference(self) -> None:
+        for horizon in range(5):
+            for state in product((0, 1), repeat=horizon):
+                self.assertEqual(
+                    raw_signature(state, horizon),
+                    state_signature(state, horizon),
+                )
 
 
 if __name__ == "__main__":

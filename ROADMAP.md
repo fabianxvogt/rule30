@@ -23,7 +23,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   the Proposition 13 correction, and the non-stabilization of truncation periods.
 - Prove or refute the Coverage Hypothesis (all S_h classes visited) — now interesting in its
   own right, independent of the counting argument.
-- Keep the bounded sibling-fiber parity check at its explicit h=11 cap; no infinite claim is
+- Keep the bounded raw sibling-fiber parity check at its explicit h=12 cap; no infinite claim is
   implied.
 
 ## Later
@@ -91,8 +91,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   observations, the best coverage remained 6/7; the length-5 slice also tops
   out at 6/7. Added a focused regression and concise bounded report. [EMPIRICAL,
   INCREMENTAL; bounded]
-- 2026-08-25: extended the dependency-free sibling-fiber parity check by exactly one bounded
-  step through h=11 after an empirical h=11 builder resource preflight. It checks the even/odd
-  child-sharing pattern and the commuting ρ/τ squares in that envelope, while recording the h=1
-  degenerate counterexample that requires the older observations to be indexed from h≥2 or h≥3.
+- 2026-08-25: replaced the package-coupled sibling-fiber parity check with a raw tuple-state
+  audit and extended its explicit cap by one step through h=12. The compact exact-signature run
+  enumerates at most 4096 raw states, preserves the h≤11 table, and adds a tuple-reference
+  regression through h=4; no infinite-horizon or center-column claim is implied.
   [EMPIRICAL, bounded]
