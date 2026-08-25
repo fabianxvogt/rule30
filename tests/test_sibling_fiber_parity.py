@@ -165,13 +165,13 @@ class SiblingFiberParityTests(unittest.TestCase):
         self.assertEqual(summary_rows[-1].split()[:4], ["13", "203", "79", "62"])
         self.assertNotIn("Pairwise raw signature distances", report.stdout)
 
-    def test_cli_default_distance_report_is_exact_and_cap_bounded(self) -> None:
+    def test_cli_distance_report_default_and_explicit_cap_are_identical(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"
         environment = os.environ.copy()
         environment.update(PYTHONDONTWRITEBYTECODE="1", PYTHONHASHSEED="0")
 
-        report = subprocess.run(
+        default_report = subprocess.run(
             [sys.executable, str(script), "--report-distances"],
             cwd=repository_root,
             env=environment,
@@ -179,14 +179,41 @@ class SiblingFiberParityTests(unittest.TestCase):
             text=True,
             check=False,
         )
-        self.assertEqual(report.returncode, 0, report.stderr)
-        self.assertEqual(report.stderr, "")
+        explicit_report = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--max-horizon",
+                str(MAX_HORIZON),
+                "--report-distances",
+            ],
+            cwd=repository_root,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        for report in (default_report, explicit_report):
+            self.assertEqual(report.returncode, 0, report.stderr)
+            self.assertEqual(report.stderr, "")
+        self.assertEqual(default_report.stdout, explicit_report.stdout)
+        report = explicit_report
         self.assertEqual(
             hashlib.sha256(report.stdout.encode("utf-8")).hexdigest(),
             "1c2e5f3ec1cb6f7de7de55a2d167ef4912128f3da0bc9135f6646dc0631981d4",
         )
 
         lines = report.stdout.splitlines()
+        self.assertEqual(
+            lines[0],
+            "Bounds: requested max horizon=13; implementation hard cap=13",
+        )
+        self.assertEqual(
+            lines[-1],
+            "Limits: raw tuple-state partitions only; implementation hard cap "
+            "h=13; no claim for larger horizons, an infinite quotient, "
+            "center-column coverage, or periodicity.",
+        )
         summary_header = lines.index(
             "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
             "share-both share-neither coll0 coll1"

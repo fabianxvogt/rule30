@@ -114,8 +114,9 @@ command-boundary reproducibility without computing beyond `h = 13`.
 The [bounded report reproducibility report](agent-wave-2026-08-25-report-reproducibility.md)
 audits default and distance-reporting output across fixed Python hash seeds
 and script/module invocation forms. Its exact regression uses `h = 3` for
-fast matrix coverage while the manual audit confirms the same bytes through
-the existing `h = 13` cap.
+fast matrix coverage and compares omitted versus explicit `--max-horizon 13`
+distance reports; the manual audit confirms the same bytes through the
+existing cap.
 
 The [lower-boundary report-structure report](agent-wave-2026-08-25-cli-boundary-structure.md)
 checks the `h = 0` and `h = 3` reports in both distance modes as structured

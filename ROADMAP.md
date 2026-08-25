@@ -153,8 +153,9 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: pinned the default `--report-distances` CLI report as an exact 20,758-byte finite
   snapshot: 202 summary pair rows, including 62 at h=13, and no displayed horizon above h=13.
   The over-cap regression now includes the distance switch and still rejects h=14 with empty
-  stdout before the audit starts. Omitted and explicit h=13 invocations were byte-identical;
-  no asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+  stdout before the audit starts. The regression now compares omitted and explicit h=13 distance
+  invocations byte-for-byte, including requested-bound, hard-cap, and limits metadata; no
+  asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
 - 2026-08-25: audited default and distance-reporting reports across script/module invocation
   forms and fixed Python hash seeds 0 and 42 at h=13; both modes were byte-identical across the
   matrix. Added an exact h=3 subprocess regression covering the same matrix, with no computation

@@ -17,9 +17,10 @@ pairwise rows, and finite-limit statement. Pairwise rows are explicitly sorted
 by `(horizon, first_state, second_state)` before they enter the public
 `AuditResult`, so the textual order does not depend on dictionary insertion
 order inside the bounded grouping implementation. It exercises the exact
-public boundary `h = 13`, checking that the run succeeds, reproduces the
-`203 / 79 / 62` row, and identifies both the requested run bound and the
-implementation hard cap in its output. Finally, it invokes the script with
+public boundary `h = 13`, checking that the omitted default and explicit
+`--max-horizon 13` distance-report invocations are byte-identical, reproduce
+the `203 / 79 / 62` row, and identify both the requested run bound and the
+implementation hard cap in their output. Finally, it invokes the script with
 `h = 14` and checks for status 2, an empty stdout stream, and the explicit
 `[0, 13]` validation message. The over-cap case is rejected before the audit
 starts, so it computes no horizon above 13.
@@ -31,7 +32,7 @@ From the repository root:
 ```text
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_sibling_fiber_parity.SiblingFiberParityTests.test_cli_report_and_cap_contract
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_sibling_fiber_parity.SiblingFiberParityTests.test_cli_zero_horizon_contract
-PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 python3 -m unittest tests.test_sibling_fiber_parity.SiblingFiberParityTests.test_cli_default_distance_report_is_exact_and_cap_bounded
+PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 python3 -m unittest tests.test_sibling_fiber_parity.SiblingFiberParityTests.test_cli_distance_report_default_and_explicit_cap_are_identical
 ```
 
 The full h=13 table and pairwise values remain covered by the existing Python
@@ -42,13 +43,14 @@ across different Python hash seeds and script/module invocation forms; the
 explicit sort and snapshots make that stability an intentional finite
 contract.
 
-The default distance-report interaction is now pinned as well. With
-`PYTHONHASHSEED=0`, the omitted `--max-horizon` form produces a 20,758-byte
-UTF-8 report with SHA-256
+The default and explicit-cap distance-report interaction is now pinned as
+well. With `PYTHONHASHSEED=0`, both the omitted `--max-horizon` form and the
+explicit `--max-horizon 13` form produce the same 20,758-byte UTF-8 report with
+SHA-256
 `1c2e5f3ec1cb6f7de7de55a2d167ef4912128f3da0bc9135f6646dc0631981d4`:
-13 summary rows, 202 pair rows, and 62 pair rows at h=13. A bounded probe
-also compared those bytes with the explicit `--max-horizon 13` form; they are
-identical. The over-cap subprocess now supplies `--report-distances` too, so
+13 summary rows, 202 pair rows, and 62 pair rows at h=13. The regression
+compares those bytes directly. The over-cap subprocess now supplies
+`--report-distances` too, so
 the distance switch is verified to fail with empty stdout before any h=14
 work can begin.
 
