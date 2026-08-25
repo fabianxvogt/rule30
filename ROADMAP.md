@@ -69,6 +69,10 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 - 2026-08-25: added a finite `PredictivePartition.class_trace` helper for reproducible class-coverage traces from bounded boundary words, exhaustively checked through h = 6 and word lengths 0..4; no eventual-coverage or infinite-horizon claim. [EMPIRICAL implementation check]
 - 2026-08-25: added the finite same-horizon set-valued transition relation, exhaustively checked for every state and boundary bit through h = 6; preserves observed class nondeterminism and makes no infinite-horizon or deterministic-automaton claim. [EMPIRICAL implementation check]
 - 2026-08-25: promoted the finite first-visit coverage profile from `fast_class_coverage2.py`, exhaustively checked for every state and boundary word through h = 6 and word lengths 0..4; it reports only the supplied finite trajectory and makes no center-column or eventual-coverage claim. [EMPIRICAL implementation check]
+- 2026-08-25: closed a finite API contract gap by validating horizons, encoded
+  states, and boundary bits in the public transition/observation helpers,
+  including empty boundary words; valid outputs and the checker CLI remain
+  unchanged. [EMPIRICAL, INCREMENTAL]
 - 2026-08-25: reconciled the public-publication checkbox with the verified GitHub
   remote and push-clean state. [EMPIRICAL publication check]
 - 2026-08-25: added an exact finite macro-cycle coverage experiment for primitive

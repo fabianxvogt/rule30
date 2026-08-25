@@ -4,9 +4,10 @@ The encoding is ``state = sum(s[i] << i for i in range(horizon))``: bit 0
 is the leftmost, boundary-adjacent cell.  For a binary boundary bit, this
 function returns the next width-limited state under the Rule 30 update.
 
-Callers must provide ``horizon >= 0``, ``0 <= state < 2**horizon``, and
-``boundary_bit`` equal to 0 or 1.  Validation remains with callers so this
-small boundary preserves the checker’s existing behavior for valid inputs.
+The exported helpers validate ``horizon >= 0``, ``0 <= state < 2**horizon``,
+and ``boundary_bit`` equal to 0 or 1 before performing finite work. The
+checker already supplies valid inputs, so this preserves its behavior while
+making the repository-local facade safe for direct use.
 """
 
 from __future__ import annotations
@@ -28,6 +29,38 @@ __all__ = [
 ResponseSignature = tuple[tuple[int, ...], ...]
 
 
+def _validate_horizon(horizon: int) -> None:
+    """Validate the finite width shared by the public helpers."""
+
+    if (
+        not isinstance(horizon, int)
+        or isinstance(horizon, bool)
+        or horizon < 0
+    ):
+        raise ValueError(f"horizon must be a non-negative integer; got {horizon}")
+
+
+def _validate_state(state: int, horizon: int) -> None:
+    """Validate one encoded state against its finite width."""
+
+    _validate_horizon(horizon)
+    if (
+        not isinstance(state, int)
+        or isinstance(state, bool)
+        or not 0 <= state < (1 << horizon)
+    ):
+        raise ValueError(
+            f"state must be an integer in [0, {1 << horizon}); got {state}"
+        )
+
+
+def _validate_boundary_bit(boundary_bit: int) -> None:
+    """Validate one binary boundary input."""
+
+    if boundary_bit not in (0, 1):
+        raise ValueError(f"boundary_bit must be 0 or 1; got {boundary_bit}")
+
+
 @dataclass(frozen=True)
 class PredictivePartition:
     """Finite-horizon response-equivalence classes for encoded states.
@@ -45,10 +78,7 @@ class PredictivePartition:
     def class_id(self, state: int) -> int:
         """Return the finite-horizon quotient class containing ``state``."""
 
-        if not 0 <= state < (1 << self.horizon):
-            raise ValueError(
-                f"state must be in [0, {1 << self.horizon}); got {state}"
-            )
+        _validate_state(state, self.horizon)
         return self._state_to_class[state]
 
     def class_members(self, class_id: int) -> tuple[int, ...]:
@@ -247,7 +277,10 @@ class PredictivePartition:
 
 
 def integer_successor(state: int, boundary_bit: int, horizon: int) -> int:
-    """Return the width-``horizon`` Rule 30 successor of an encoded state."""
+    """Return the checked width-``horizon`` successor of an encoded state."""
+
+    _validate_state(state, horizon)
+    _validate_boundary_bit(boundary_bit)
 
     mask = (1 << horizon) - 1
     left = ((state << 1) | boundary_bit) & mask
@@ -261,11 +294,12 @@ def evolve_integer_state(
     """Apply successive boundary bits and return the final encoded state.
 
     ``boundary_bits`` is consumed once from left to right.  An empty iterable
-    leaves a valid encoded state unchanged.  As with ``integer_successor``,
-    callers provide a non-negative horizon, a width-limited state, and binary
-    boundary values; this helper intentionally keeps the API validation-free.
+    leaves a valid encoded state unchanged.  The initial state and horizon are
+    validated even when the iterable is empty; each consumed boundary bit is
+    validated by ``integer_successor``.
     """
 
+    _validate_state(state, horizon)
     for boundary_bit in boundary_bits:
         state = integer_successor(state, boundary_bit, horizon)
     return state
@@ -279,9 +313,11 @@ def response_trace(
     This is the integer counterpart of the predictive-state response trace:
     each output is sampled from the current state, then the corresponding
     boundary bit advances the state.  ``boundary_bits`` is consumed once from
-    left to right, and an empty iterable returns an empty trace.
+    left to right, and an empty iterable returns an empty trace. The initial
+    state and horizon are validated before consuming the iterable.
     """
 
+    _validate_state(state, horizon)
     output: list[int] = []
     for boundary_bit in boundary_bits:
         output.append(state & 1)
@@ -321,12 +357,7 @@ def response_signature(state: int, horizon: int) -> ResponseSignature:
     criterion, not an infinite-horizon quotient.
     """
 
-    if horizon < 0:
-        raise ValueError(f"horizon must be non-negative; got {horizon}")
-    if not 0 <= state < (1 << horizon):
-        raise ValueError(
-            f"state must be in [0, {1 << horizon}); got {state}"
-        )
+    _validate_state(state, horizon)
     return tuple(
         response_trace(state, boundary_bits, horizon)
         for boundary_bits in _boundary_words(horizon)
@@ -344,8 +375,7 @@ def predictive_partition(horizon: int) -> PredictivePartition:
     unbounded production algorithm.
     """
 
-    if horizon < 0:
-        raise ValueError(f"horizon must be non-negative; got {horizon}")
+    _validate_horizon(horizon)
 
     previous = PredictivePartition(0, ((0,),), (0,))
     for current_horizon in range(1, horizon + 1):

@@ -488,14 +488,42 @@ class IntegerSuccessorTests(unittest.TestCase):
                         )
 
     def test_predictive_partition_rejects_invalid_horizons_and_states(self) -> None:
-        with self.assertRaises(ValueError):
-            predictive_partition(-1)
-        with self.assertRaises(ValueError):
-            response_signature(0, -1)
+        for invalid_horizon in (-1, True, 1.5):
+            with self.subTest(invalid_horizon=invalid_horizon):
+                with self.assertRaises(ValueError):
+                    predictive_partition(invalid_horizon)
+                with self.assertRaises(ValueError):
+                    response_signature(0, invalid_horizon)
+
         with self.assertRaises(ValueError):
             response_signature(4, 2)
         with self.assertRaises(ValueError):
             predictive_partition(2).class_id(4)
+
+    def test_integer_api_rejects_invalid_finite_domain_inputs(self) -> None:
+        invalid_successor_inputs = (
+            (0, 0, -1),
+            (0, 0, True),
+            (8, 0, 3),
+            (-1, 0, 3),
+            (0, 2, 3),
+        )
+        for state, boundary_bit, horizon in invalid_successor_inputs:
+            with self.subTest(
+                state=state, boundary_bit=boundary_bit, horizon=horizon
+            ):
+                with self.assertRaises(ValueError):
+                    integer_successor(state, boundary_bit, horizon)
+
+        with self.assertRaises(ValueError):
+            evolve_integer_state(8, (), 3)
+        with self.assertRaises(ValueError):
+            response_trace(8, (), 3)
+
+        with self.assertRaises(ValueError):
+            evolve_integer_state(0, (2,), 3)
+        with self.assertRaises(ValueError):
+            response_trace(0, (2,), 3)
 
     @staticmethod
     def _tuple_states(

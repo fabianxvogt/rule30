@@ -34,6 +34,11 @@ the documented `rule30` facade:
 from rule30 import predictive_partition, response_signature
 ```
 
+The integer transition and observation helpers validate their finite-domain
+contract before doing work, including when a boundary iterable is empty. See
+[`agent-wave-2026-08-25-api-contract-guardrails.md`](agent-wave-2026-08-25-api-contract-guardrails.md)
+for the bounded regression and limits.
+
 See [`agent-wave-2026-08-25-package-facade.md`](agent-wave-2026-08-25-package-facade.md)
 for the compatibility checks and explicit finite-horizon limits. The facade
 does not include the exploratory scripts or generated results. The
