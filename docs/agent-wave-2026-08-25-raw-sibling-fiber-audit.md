@@ -8,8 +8,8 @@ simulation, then derives `rho_h` by dropping the rightmost state bit and
 `tau_0`, `tau_1` by applying one raw Rule 30 update before dropping that bit.
 It does not call the package's nested-map, fiber, or partition helpers.
 
-The explicit hard cap is now `h = 13`; the run enumerates at most `2^13 = 8192`
-raw states. A preflight at the new cap completed in 55.63 seconds with a peak
+The explicit hard cap is now `h = 13`; at any one source horizon the run
+enumerates at most `2^13 = 8192` raw states. A preflight at the new cap completed in 55.63 seconds with a peak
 resident set size of 252,231,680 bytes on the audit machine. Every checked
 truncation fiber had size at most two;
 the commuting squares, same-leading-bit sibling check, and parity assertions
@@ -40,7 +40,7 @@ sharing `tau_0` and 31 sharing `tau_1`; no pair shares both or neither, and the
 two collision counts match those directions. The same-leading-bit condition
 also continues to hold for all 62 doubleton pairs.
 
-An independent raw cross-check also compared each doubleton pair's complete
+A separate raw cross-check also compared each doubleton pair's complete
 response signatures over all `2^h` boundary words. For every checked horizon
 `1 <= h <= 13`, each pair differed on exactly
 `2^(floor(h/2) + 1)` words. Thus at `h = 13`, all 62 pairs differed on 128 of

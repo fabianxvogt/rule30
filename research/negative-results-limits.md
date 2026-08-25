@@ -61,7 +61,8 @@ a general finite rule.
 
 The independent raw tuple-state audit exhaustively rebuilds the finite
 response signatures and the maps `rho_h`, `tau_0`, and `tau_1` through the
-explicit cap `h=13` (at most `2^13 = 8192` raw states). At `h=13`, it finds
+explicit cap `h=13` (at most `2^13 = 8192` raw states at any one source
+horizon). At `h=13`, it finds
 `|S_13| = 203`, with `79` singleton and `62` doubleton truncation fibers.
 The cap preflight used 55.63 seconds wall time and 252,231,680 bytes peak
 resident memory on the audit machine.
@@ -79,7 +80,7 @@ doubletons split evenly between sharing `tau_0` and `tau_1` (31 each), with no
 share-both or share-neither pairs; the two collision counts are also 31 and
 31.
 
-An independent raw comparison of the full response signatures adds one more
+A separate raw comparison of the full response signatures adds one more
 bounded observation: every doubleton pair differed on exactly
 `2^(floor(h/2) + 1)` of the `2^h` boundary words for each checked
 `1 <= h <= 13`. At `h=13`, that is 128 disagreements per pair across 8192

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import Counter
 from itertools import product
 import unittest
 
@@ -91,6 +92,17 @@ class SiblingFiberParityTests(unittest.TestCase):
                 for report in h13
             },
             {(128, 0, 128), (128, 128, 0)},
+        )
+        self.assertEqual(
+            Counter(
+                (
+                    report.full_distance,
+                    report.child_distance_0,
+                    report.child_distance_1,
+                )
+                for report in h13
+            ),
+            Counter({(128, 0, 128): 31, (128, 128, 0): 31}),
         )
 
         def direct_distance(

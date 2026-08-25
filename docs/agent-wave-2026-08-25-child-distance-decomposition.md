@@ -32,6 +32,11 @@ d_h(c, c') = d_{h-1}(tau_0(c), tau_0(c'))
            + d_{h-1}(tau_1(c), tau_1(c')).
 ```
 
+Here each `d_{h-1}` is the Hamming distance between the complete raw
+signatures of the corresponding two raw child states; `tau_0` and `tau_1`
+identify their finite child classes. The equality is asserted only for the
+finite raw states and horizons in this audit.
+
 The `h = 1` pair is intentionally reported as an exception: its leading bits
 differ, so the first observed output contributes two disagreements across the
 two response blocks and the child sum is zero. This is a finite boundary case,
@@ -53,10 +58,11 @@ PYTHONDONTWRITEBYTECODE=1 python3 experiments/sibling_fiber_parity.py \
 The focused regression in
 `tests/test_sibling_fiber_parity.py` checks the complete bounded table,
 all 202 pair records, the explicit `h = 1` exception, and the `h = 13`
-distance split. It also recomputes the direct tuple-state signatures for every
-reported pair and both children through `h = 5`, independently cross-checking
-the compact raw-signature distance path at the lower envelope. The audit is
-exact only for raw finite horizons through 13;
+distance split (31 pairs in each direction). It also recomputes the direct
+tuple-state signatures for every reported pair and both children through
+`h = 5`, using a separate direct tuple-state code path to cross-check the
+compact raw-signature distance path at the lower envelope. The audit is exact
+only for raw finite horizons through 13;
 it makes no asymptotic, infinite-horizon, center-column, or periodicity claim.
 
 Classification: **EMPIRICAL / INCREMENTAL**, bounded.
