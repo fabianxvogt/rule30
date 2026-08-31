@@ -25,6 +25,143 @@ from rule30 import predictive_partition
 
 
 class SiblingFiberParityTests(unittest.TestCase):
+    def test_cli_explicit_boundary_reports_match_finite_audit_sections(self) -> None:
+        repository_root = Path(__file__).resolve().parents[1]
+        script = repository_root / "experiments" / "sibling_fiber_parity.py"
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        limits = (
+            "Limits: raw tuple-state partitions only; implementation hard cap "
+            f"h={MAX_HORIZON}; no claim for larger horizons, an infinite quotient, "
+            "center-column coverage, or periodicity."
+        )
+        summary_header = (
+            "h |S_h| n1 n2 same-ell share-tau0 share-tau1 "
+            "share-both share-neither coll0 coll1"
+        )
+        summary_separator = (
+            "-- ----- -- -- --------- ---------- ---------- "
+            "---------- ------------ ----- -----"
+        )
+        pair_title = "Pairwise raw signature distances (exact within bound)"
+        pair_header = "h first-state second-state leading-equal full d0 d1"
+        summary_pattern = re.compile(r"^\s*(\d+(?:\s+\d+){10})$")
+        pair_pattern = re.compile(
+            r"^\s*(\d+)\s+(\([^)]*\))\s+(\([^)]*\))\s+"
+            r"(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$"
+        )
+
+        for horizon in (0, 3, MAX_HORIZON):
+            expected = audit(horizon)
+            expected_summaries = [
+                (
+                    summary.horizon,
+                    summary.class_count,
+                    summary.singleton_fibers,
+                    summary.doubleton_fibers,
+                    summary.same_leading_bit_pairs,
+                    summary.share_tau0,
+                    summary.share_tau1,
+                    summary.share_both,
+                    summary.share_neither,
+                    summary.rho_tau0_collisions,
+                    summary.rho_tau1_collisions,
+                )
+                for summary in expected.summaries
+            ]
+            expected_pairs = [
+                (
+                    report.horizon,
+                    report.first_state,
+                    report.second_state,
+                    int(report.leading_bits_equal),
+                    report.full_distance,
+                    report.child_distance_0,
+                    report.child_distance_1,
+                )
+                for report in expected.pairwise_distances
+            ]
+            reports: dict[bool, list[str]] = {}
+
+            for report_distances in (False, True):
+                command = [
+                    sys.executable,
+                    str(script),
+                    "--max-horizon",
+                    str(horizon),
+                ]
+                if report_distances:
+                    command.append("--report-distances")
+                report = subprocess.run(
+                    command,
+                    cwd=repository_root,
+                    env=environment,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(report.returncode, 0, report.stderr)
+                self.assertEqual(report.stderr, "")
+                lines = report.stdout.splitlines()
+                reports[report_distances] = lines
+
+                self.assertEqual(
+                    lines[:4],
+                    [
+                        f"Bounds: requested max horizon={horizon}; "
+                        f"implementation hard cap={MAX_HORIZON}",
+                        "Raw sibling-fiber parity check (EMPIRICAL; exact within bound)",
+                        summary_header,
+                        summary_separator,
+                    ],
+                )
+                summary_lines = lines[4 : 4 + horizon]
+                parsed_summaries = []
+                for line in summary_lines:
+                    match = summary_pattern.fullmatch(line)
+                    self.assertIsNotNone(match, line)
+                    assert match is not None
+                    parsed_summaries.append(tuple(map(int, match.group(1).split())))
+                self.assertEqual(parsed_summaries, expected_summaries)
+
+                if not report_distances:
+                    self.assertEqual(lines[4 + horizon :], [limits])
+                    self.assertNotIn("", lines)
+                    self.assertNotIn(pair_title, lines)
+                    continue
+
+                self.assertEqual(lines[4 + horizon], "")
+                self.assertEqual(lines[5 + horizon], pair_title)
+                self.assertEqual(lines[6 + horizon], pair_header)
+                self.assertEqual(lines[-1], limits)
+                self.assertEqual(
+                    [index for index, line in enumerate(lines) if not line],
+                    [4 + horizon],
+                )
+                pair_lines = lines[7 + horizon : -1]
+                parsed_pairs = []
+                for line in pair_lines:
+                    match = pair_pattern.fullmatch(line)
+                    self.assertIsNotNone(match, line)
+                    assert match is not None
+                    parsed_pairs.append(
+                        (
+                            int(match.group(1)),
+                            ast.literal_eval(match.group(2)),
+                            ast.literal_eval(match.group(3)),
+                            int(match.group(4)),
+                            int(match.group(5)),
+                            int(match.group(6)),
+                            int(match.group(7)),
+                        )
+                    )
+                self.assertEqual(parsed_pairs, expected_pairs)
+
+            self.assertEqual(
+                reports[False][: 4 + horizon], reports[True][: 4 + horizon]
+            )
+            self.assertEqual(reports[False][-1], reports[True][-1])
+
     def test_cli_lower_boundary_report_structure_is_bounded_and_ordered(self) -> None:
         repository_root = Path(__file__).resolve().parents[1]
         script = repository_root / "experiments" / "sibling_fiber_parity.py"

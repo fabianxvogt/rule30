@@ -2,6 +2,11 @@
 """
 Compare full vs. reachable predictive-state class counts for Rule 30.
 
+For the provenance-recorded trajectory-memory question, use
+``trajectory_restricted_observer.py``. This older text-only script remains a
+quick exploratory reproduction of the same visited-class baseline; it does
+not emit hashes or independent generator controls.
+
 For each horizon h we ask: how many of the |S_h| predictive-state classes
 are actually visited by the real center-column-driven trajectory?
 

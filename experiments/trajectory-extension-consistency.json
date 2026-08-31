@@ -1,0 +1,126 @@
+{
+  "classification": "INCREMENTAL_NEGATIVE_CONTROL",
+  "decision": "NO_GO_ZERO_PADDED_REFERENCE_ARTIFACT",
+  "definition": {
+    "compatibility": "complete visible pre-update bit and post-update state agree with the zero-padded trajectory",
+    "d": 1,
+    "k": 1,
+    "k_meaning": "one fixed right-extension bit",
+    "quantifier": "one extension must match every time in the contiguous block",
+    "response": "(visible pre-update bit, complete visible post-update state)",
+    "trajectory": "zero-initialized finite width-d state driven by center prefix"
+  },
+  "evidence": "DERIVED",
+  "first_step": [
+    {
+      "boundary_bit": 1,
+      "extension_responses": {
+        "0": [
+          0,
+          1
+        ],
+        "1": [
+          0,
+          0
+        ]
+      },
+      "observed_response": [
+        0,
+        1
+      ],
+      "state": 0,
+      "time": 0
+    }
+  ],
+  "holdout_compatible_extensions": {
+    "0": true,
+    "1": false
+  },
+  "information_bits": 1.0,
+  "input": {
+    "bits": [
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1
+    ],
+    "holdout_steps": 32,
+    "kind": "canonical_center_column_prefix",
+    "length": 64,
+    "train_steps": 32
+  },
+  "limitations": [
+    "one fixed extension bit and one finite 64-step prefix",
+    "the trajectory is the finite zero-padded reference model, not the unknown semi-infinite right half",
+    "a unique extension can be a boundary convention artifact rather than hidden-information recovery",
+    "no superconstant lower bound, aperiodicity result, or infinite-trajectory theorem"
+  ],
+  "oracle_agreement": true,
+  "separating_power": true,
+  "surviving_holdout": {
+    "0": true
+  },
+  "train_compatible_extensions": [
+    0
+  ]
+}

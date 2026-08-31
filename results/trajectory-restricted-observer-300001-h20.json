@@ -1,0 +1,283 @@
+{
+  "controls": {
+    "integer_tuple_reference_checked": {
+      "0": 256,
+      "1": 256,
+      "10": 256,
+      "11": 256,
+      "12": 256,
+      "13": 256,
+      "14": 256,
+      "15": 256,
+      "16": 256,
+      "17": 256,
+      "18": 256,
+      "19": 256,
+      "2": 256,
+      "20": 256,
+      "3": 256,
+      "4": 256,
+      "5": 256,
+      "6": 256,
+      "7": 256,
+      "8": 256,
+      "9": 256
+    },
+    "partition_builder": "rule30.predictive_partition recursive exhaustive finite states",
+    "right_boundary": "zero_padded_exact_for_h_steps"
+  },
+  "definition": {
+    "factor_control": "distinct observed center-column windows c[t:t+h]",
+    "full_class": "same adjacent-column response for every binary boundary word of length h",
+    "state": "s_h(t)=F_{c[t-1]}...F_{c[0]}(0^h)",
+    "trajectory_class_set": "{q_h(s_h(t)): 0 <= t < N}"
+  },
+  "input": {
+    "kind": "center_column_single_seed",
+    "length": 300001,
+    "path": "results/center-column-300000.txt",
+    "prefix": "11011100110001011001001110101110",
+    "sha256": "e96390915ef4fb2e694fb6adf606474bf700205f0143cc0161b041d4074c327d",
+    "slow_reference_checked": 256,
+    "source": "file:validated_against_generate_center_column_slow"
+  },
+  "rows": [
+    {
+      "full_predictive_classes": 1,
+      "horizon": 0,
+      "partition_sha256": "db407f11d7ede59abaab0e98e097ff2dae10a048207b801745d7199ef19c2387",
+      "raw_states": 1,
+      "trajectory_factor_classes": 1,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 0,
+      "trajectory_predictive_classes": 1,
+      "trajectory_raw_states": 1
+    },
+    {
+      "full_predictive_classes": 2,
+      "horizon": 1,
+      "partition_sha256": "57361b63331982d3b2000f0840884dc9f5c3e41fcc6ec2e32c9daf4721696adf",
+      "raw_states": 2,
+      "trajectory_factor_classes": 2,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 0,
+      "trajectory_predictive_classes": 2,
+      "trajectory_raw_states": 2
+    },
+    {
+      "full_predictive_classes": 3,
+      "horizon": 2,
+      "partition_sha256": "23592c7ce92b73188f886f4f89c73450a00288a25cf0ea1ab2aae40479d50255",
+      "raw_states": 4,
+      "trajectory_factor_classes": 4,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 2,
+      "trajectory_predictive_classes": 3,
+      "trajectory_raw_states": 4
+    },
+    {
+      "full_predictive_classes": 5,
+      "horizon": 3,
+      "partition_sha256": "3f31628899f7a4bc8e06c7f4295fe813a3b8b5713a96e4f1cbbd40795c6e937f",
+      "raw_states": 8,
+      "trajectory_factor_classes": 8,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 2,
+      "trajectory_predictive_classes": 5,
+      "trajectory_raw_states": 8
+    },
+    {
+      "full_predictive_classes": 7,
+      "horizon": 4,
+      "partition_sha256": "836be6a044c83cafb866d4ed68be41420e004dcb124c1380ded62004b2c26e64",
+      "raw_states": 16,
+      "trajectory_factor_classes": 16,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 3,
+      "trajectory_predictive_classes": 7,
+      "trajectory_raw_states": 16
+    },
+    {
+      "full_predictive_classes": 11,
+      "horizon": 5,
+      "partition_sha256": "bed674efe179a2477d04b1ddc61d72889b614ac4aa980fedc2d198999bbfdb43",
+      "raw_states": 32,
+      "trajectory_factor_classes": 32,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 2,
+      "trajectory_predictive_classes": 11,
+      "trajectory_raw_states": 32
+    },
+    {
+      "full_predictive_classes": 16,
+      "horizon": 6,
+      "partition_sha256": "2d6f48d2cf46104fb65dbe455ad2fb966e21a6db6a749d2adbe00c6f6d106e6b",
+      "raw_states": 64,
+      "trajectory_factor_classes": 64,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 9,
+      "trajectory_predictive_classes": 16,
+      "trajectory_raw_states": 64
+    },
+    {
+      "full_predictive_classes": 25,
+      "horizon": 7,
+      "partition_sha256": "e44eda8ba2978972ab21a06ae6fef68947f776788592d82e428f41e20bb663b9",
+      "raw_states": 128,
+      "trajectory_factor_classes": 128,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 23,
+      "trajectory_predictive_classes": 25,
+      "trajectory_raw_states": 128
+    },
+    {
+      "full_predictive_classes": 35,
+      "horizon": 8,
+      "partition_sha256": "a303bb1110fb4600db3e46db9b7173435c33f7b0feed11178f0444919e46dcdb",
+      "raw_states": 256,
+      "trajectory_factor_classes": 256,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 2,
+      "trajectory_predictive_classes": 35,
+      "trajectory_raw_states": 256
+    },
+    {
+      "full_predictive_classes": 52,
+      "horizon": 9,
+      "partition_sha256": "d3baf5532dbc82e9781b07345aec91a18d59521b7fdedf823068aa7b307eaf26",
+      "raw_states": 512,
+      "trajectory_factor_classes": 512,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 3,
+      "trajectory_predictive_classes": 52,
+      "trajectory_raw_states": 512
+    },
+    {
+      "full_predictive_classes": 71,
+      "horizon": 10,
+      "partition_sha256": "1aa3578683df99b7e0b9183161661c81c8046ee0b274a186045cd6fb006164be",
+      "raw_states": 1024,
+      "trajectory_factor_classes": 1024,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 15,
+      "trajectory_predictive_classes": 71,
+      "trajectory_raw_states": 1024
+    },
+    {
+      "full_predictive_classes": 104,
+      "horizon": 11,
+      "partition_sha256": "570733e05ed134606628ee7b9ca26f2ba1533ae3614f785a6dff55f4b0b32dd6",
+      "raw_states": 2048,
+      "trajectory_factor_classes": 2048,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 2,
+      "trajectory_predictive_classes": 104,
+      "trajectory_raw_states": 2048
+    },
+    {
+      "full_predictive_classes": 141,
+      "horizon": 12,
+      "partition_sha256": "5bb0ba1c4a25d3f8d14b18a3e1f2bbc2697f27ea2d19ad396e9a5eec974faa26",
+      "raw_states": 4096,
+      "trajectory_factor_classes": 4096,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 3,
+      "trajectory_predictive_classes": 141,
+      "trajectory_raw_states": 4096
+    },
+    {
+      "full_predictive_classes": 203,
+      "horizon": 13,
+      "partition_sha256": "96274ce68e83ab45c2c4811e95372d5970a7452ea54ee4a6581f0a4675a327fe",
+      "raw_states": 8192,
+      "trajectory_factor_classes": 8192,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 15,
+      "trajectory_predictive_classes": 203,
+      "trajectory_raw_states": 8192
+    },
+    {
+      "full_predictive_classes": 272,
+      "horizon": 14,
+      "partition_sha256": "2ab9b2a4f4126249d651e27829cfe366520f35f8b677c5545284214036d69c66",
+      "raw_states": 16384,
+      "trajectory_factor_classes": 16384,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 62,
+      "trajectory_predictive_classes": 272,
+      "trajectory_raw_states": 16384
+    },
+    {
+      "full_predictive_classes": 387,
+      "horizon": 15,
+      "partition_sha256": "c239c02c05582e1841c1a550adc3cf75c5c5d1bdfa0ed6ddedf902142cf2e8f0",
+      "raw_states": 32768,
+      "trajectory_factor_classes": 32764,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 185,
+      "trajectory_predictive_classes": 387,
+      "trajectory_raw_states": 32765
+    },
+    {
+      "full_predictive_classes": 517,
+      "horizon": 16,
+      "partition_sha256": "c06103538f5201f33ac731e198541d586f44513df6af09cc6a9879904d2e9f5d",
+      "raw_states": 65536,
+      "trajectory_factor_classes": 64821,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 123,
+      "trajectory_predictive_classes": 517,
+      "trajectory_raw_states": 64857
+    },
+    {
+      "full_predictive_classes": 733,
+      "horizon": 17,
+      "partition_sha256": "5b65345ae291595f727cb1ad426837f414abbdccd90fd10c75d807ef11bdd05a",
+      "raw_states": 131072,
+      "trajectory_factor_classes": 117706,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 3,
+      "trajectory_predictive_classes": 733,
+      "trajectory_raw_states": 117785
+    },
+    {
+      "full_predictive_classes": 971,
+      "horizon": 18,
+      "partition_sha256": "d81a62dabf8de37059b95992edbff9b197abb2b4dc4bab482db96542a0d022cb",
+      "raw_states": 262144,
+      "trajectory_factor_classes": 178688,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 218,
+      "trajectory_predictive_classes": 969,
+      "trajectory_raw_states": 178507
+    },
+    {
+      "full_predictive_classes": 1364,
+      "horizon": 19,
+      "partition_sha256": "ee3f753d5edd27048742dffa6b999178fb10a30257b27ab9dd4f8d5e3630e440",
+      "raw_states": 524288,
+      "trajectory_factor_classes": 228427,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 40,
+      "trajectory_predictive_classes": 1362,
+      "trajectory_raw_states": 228135
+    },
+    {
+      "full_predictive_classes": 1792,
+      "horizon": 20,
+      "partition_sha256": "485f3dd01ba311ead76c16791b80cbae9867275c4cd1d4e0d77673cadceb9451",
+      "raw_states": 1048576,
+      "trajectory_factor_classes": 260801,
+      "trajectory_first_class": 0,
+      "trajectory_last_class": 277,
+      "trajectory_predictive_classes": 1782,
+      "trajectory_raw_states": 261028
+    }
+  ],
+  "runtime": {
+    "implementation": "CPython",
+    "python": "3.9.6",
+    "script_sha256": "3ceafae39856673b068c90b7bc7fa8c9e61f70319989cb27b19094cac93ef17a"
+  },
+  "schema": "rule30.trajectory_restricted_observer.v1"
+}

@@ -3,7 +3,7 @@
 **Date:** 2026-08-25
 **Classification:** INCREMENTAL / EMPIRICAL unless stated otherwise
 
-This note consolidates three related finite investigations. They constrain a
+This note consolidates four related finite investigations. They constrain a
 coverage-based proof strategy, but none of them proves or disproves eventual
 periodicity of the Rule 30 center column.
 
@@ -106,6 +106,30 @@ envelope. These observations describe a bounded zero-padded quotient; they do
 not establish a parity theorem for larger `h`, an infinite-horizon quotient,
 center-column coverage, or any periodicity result. The [raw audit report](../docs/agent-wave-2026-08-25-raw-sibling-fiber-audit.md)
 contains the exact table and reproduction command.
+
+## 4. Safe horizons do not yield a reusable same-depth factor
+
+A boundary-free finite audit classifies right-half prefixes by their complete
+response through depth `d`. Locality makes each such class depend only on the
+first `d` cells, regardless of any wider right extension. Exhaustive checks for
+`d=1..14` and widths through 18 found zero extension mismatches and zero
+class-conditioned conflict keys in the nested transition from depth `d` to
+depth `d-1` after one update.
+
+The stronger **right-extension-quantified same-depth relation** is set-valued at
+every tested depth. It allows both values of the one additional right cell needed
+to refresh the horizon; this differs from the public zero-padded same-horizon API,
+which fixes that cell to zero and is a subset of the audited relation. In the
+extension-quantified relation, one `(class, boundary bit)` can reach multiple
+same-depth classes. The same conflicts occur on the exact single-seed trajectory
+independently inside each of three disjoint 4,096-state intervals, so raw
+unreachable prefixes are not the sole cause inside this bound.
+
+This is a bounded negative result about this predictive-class family. It does
+not rule out another refinement or finite-state encoding, and it makes no
+asymptotic or center-periodicity claim. See the
+[safe-horizon report](../docs/agent-wave-2026-08-25-nested-safe-horizon-audit.md)
+and `experiments/nested_safe_horizon_audit.py`.
 
 ## Current limit of the strategy
 

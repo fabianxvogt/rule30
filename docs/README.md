@@ -11,9 +11,17 @@ Never store credentials, private data, generated output, logs, datasets, or buil
 The concise cross-report note
 [`research/negative-results-limits.md`](../research/negative-results-limits.md)
 is the current entry point for the Proposition 13 retraction, periodic-input
-phase audits, and raw sibling-fiber evidence through `h=13`. The detailed
+phase audits, raw sibling-fiber evidence through `h=13`, and the nested
+safe-horizon factor boundary. The detailed
 reports below remain provenance records; none makes a center-column or
 infinite-horizon claim.
+
+The [nested safe-horizon audit](agent-wave-2026-08-25-nested-safe-horizon-audit.md)
+checks widths through 18 and response depths through 14. It finds coherent
+class-conditioned depth-consuming transitions but rejects reusable
+right-extension-quantified same-depth deterministic factors at every tested
+depth, including on three disjoint exact trajectory intervals. This relation
+is explicitly distinguished from the public zero-padded same-horizon API.
 
 ## Verified finite-width check
 
@@ -123,3 +131,38 @@ checks the `h = 0` and `h = 3` reports in both distance modes as structured
 finite documents: summary and pair-row ordering, empty-section placement,
 shared summary boundaries, and exact cap/limits wording. It adds no computation
 above `h = 13` and makes no asymptotic claim.
+
+The [finite CLI semantic-section report](agent-wave-2026-08-25-cli-semantic-sections.md)
+cross-validates every serialized summary and pair row against the bounded raw
+audit at explicit `h = 0`, `h = 3`, and `h = 13` in both distance modes. It
+also verifies that the distance switch changes only the pair section and that
+the cap/limits metadata is shared. It remains bounded by `h <= 13` and makes
+no infinite-horizon or center-column claim.
+
+The [trajectory-restricted observer report](agent-wave-2026-08-25-trajectory-restricted-observer.md)
+defines the exact restriction `R_{h,N}` of the finite all-boundary predictive
+quotient to the actual center-column-driven states. Its JSON artifacts record
+input/script hashes and independent generator/state-transition checks. Through
+`h=20`, a one-million-bit generated prefix visits every finite predictive class;
+this is bounded empirical evidence against a small trajectory subquotient, not
+a theorem about asymptotic coverage or non-periodicity.
+
+The [finite-to-unbounded bridge report](agent-wave-2026-08-25-finite-unbounded-bridge.md)
+extracts exact first-visit profiles from the retained fixtures, refutes the
+predeclared bound `B(h)=2^(h+1)` at `h=5` and `h=11`, proves the downward
+cross-horizon projection lemma, and records the smallest same-prefix lift
+failure (`q_2` covered after `11` while `q_3` is not). It remains bounded
+empirical evidence and does not establish eventual coverage.
+
+The [fixed-extension consistency report](agent-wave-2026-08-26-extension-consistency.md)
+audits one hidden right-extension bit under a fixed `exists e: forall t`
+contract. Its held-out result selects zero padding and closes that bounded
+extension-rank model as a no-go.
+
+The [padding-free path compatibility report](agent-wave-2026-08-31-padding-free-path-compatibility.md)
+proves a different finite statement: under a fixed two-update shrinking cone,
+all 16 boundary-by-extension cases are exhaustively evaluated, and boundaries
+`10`/`11` admit the distinct compatible `000`/`001` paths. Minimality is only
+relative to the all-zero baseline and initial
+observed zero. It does not reopen the fixed zero-padding extension-rank model
+or imply an unbounded Rule 30 result.

@@ -13,6 +13,7 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 
 ## Next
 
+- Reopen extension-rank work only with a non-zero hidden-extension model that is not the finite zero-padding convention; do not enlarge k or the response horizon from this no-go.
 - Evaluate any future distinct bounded API seams in `right_half_response_classes.py` and
   `predictive_state_growth.py`; their finite response-signature and recursive-partition cores
   are already represented by the package. Do not package CLI-only reports without a separate,
@@ -26,6 +27,19 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   own right, independent of the counting argument.
 - Keep the bounded raw sibling-fiber parity check at its explicit h=13 cap; no infinite claim is
   implied.
+- [x] Define and run the trajectory-restricted predictive-class probe through
+  `h=20` on 300,001-bit and independently generated 1,000,001-bit prefixes;
+  the latter visits all finite classes through `h=20`. The exact finite
+  definition, hashes, independent checks, prior-art boundary, and limitations
+  are recorded in `docs/agent-wave-2026-08-25-trajectory-restricted-observer.md`.
+  [EMPIRICAL, INCREMENTAL; bounded; no asymptotic claim]
+- [x] Extract exact first-visit profiles from both retained trajectory runs and
+  test the predeclared `B(h)=2^(h+1)` bridge bound. The bound fails at `h=5`
+  (`80 > 64`) and `h=11` (`5165 > 4096`) despite complete coverage. The
+  formal downward projection lemma survives, while same-prefix lift coverage
+  fails first nontrivially from `q_2` to `q_3` after center prefix `11`.
+  See `docs/agent-wave-2026-08-25-finite-unbounded-bridge.md`.
+  [FORMAL finite projection / EMPIRICAL bounded counterexamples]
 
 ## Later
 
@@ -39,6 +53,21 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
 
 ## Done
 
+- 2026-08-31: proved a distinct padding-free finite path-compatibility result
+  for a fixed two-update shrinking cone across all 16 boundary-by-extension
+  cases. Its minimality is relative to the all-zero baseline and initial
+  observed zero; it neither reopens the fixed zero-padding extension-rank
+  no-go below nor implies an unbounded Rule 30 claim. [FORMAL finite theorem /
+  EMPIRICAL oracle agreement; INCREMENTAL]
+- 2026-08-26: resolved the extension-rank definition with `d=1`, `k=1` as one fixed right-extension bit and `exists e: forall t` compatibility. The 32-step training block selected only zero padding; zero held out for 32 steps while one failed. Production integer and independent tuple oracles agreed, closing the fixed-extension bridge as a bounded `NO-GO`.
+- 2026-08-25: made the finite reconstruction boundary explicit with a
+  deterministic safe-horizon audit. Across depths 1..14 and nested widths
+  through 18, response classes have zero extension mismatches and every
+  `(class, boundary bit)` has one `d -> d-1` target. The distinct
+  right-extension-quantified same-depth relation fails at every depth both
+  globally and inside three disjoint exact center-trajectory intervals. It is
+  not the public zero-padded same-horizon API. No asymptotic or periodicity
+  claim follows. [EMPIRICAL, INCREMENTAL bounded negative result]
 - Verified open status of Wolfram Prize Problem 1 against primary sources (2019 announcement,
   prize site). [REPORTED]
 - Self-contained proof of the two-column barrier (Prop 2 + Cor 3 + left-edge property). [FORMAL]
@@ -164,3 +193,8 @@ Living plan for the rule30 workspace. Claims are labeled per the research honest
   without distance reporting. Added regression coverage for summary/pair row ordering, empty
   pair-section boundaries, shared summary rows, and exact h=13 cap/limits wording; no computation
   above h=13 or asymptotic claim was added. [EMPIRICAL, INCREMENTAL; bounded]
+- 2026-08-25: cross-validated every serialized summary and pair row against the bounded raw
+  `AuditResult` at explicit h=0, h=3, and h=13 with and without distance reporting. The regression
+  confirms that the switch changes only the finite pair section, preserves cap/limits metadata, and
+  emits exactly 0/4/202 pair rows at those bounds; no computation above h=13 or asymptotic claim
+  was added. [EMPIRICAL, INCREMENTAL; bounded]

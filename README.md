@@ -156,6 +156,8 @@ python3 experiments/predictive_state_trace.py --input results/center-column-1000
 python3 experiments/predictive_state_growth.py            # |S_h| through h≈21 in minutes
 python3 experiments/fast_class_coverage2.py --horizon 13 --file results/center-column-100000.txt
                                                             # bounded coverage trace at h=13
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 experiments/nested_safe_horizon_audit.py
+                                                            # depth-consuming vs same-depth audit
 ```
 
 ## Bounded Python API
@@ -220,7 +222,8 @@ Highlights (see `experiments/` for the full set of ~117 scripts):
 | `front_propagation_proof.py` | Front Propagation Lemma behind Theorem 11+ | Verified h ≤ 10 exhaustive, h ≤ 14 sampled |
 | `quotient_connectivity.py` | BFS reachability of all raw states from zeros | All 2^h states reached in exactly h steps, h ≤ 20 |
 | `right_half_response_classes.py` | Response-equivalence compression of right-half states | Strong compression through horizon 11 |
-| `predictive_state_automaton.py` | Coherence of quotient transitions across horizons | Deterministic next-class map holds through horizon 10+ |
+| `predictive_state_automaton.py` | Coherence of a zero-padded finite surrogate | Exact for that surrogate; not a same-depth factor of the true right half |
+| `nested_safe_horizon_audit.py` | Safe-width coherence and right-extension-quantified determinism | Class-conditioned `d -> d-1` maps pass through d=14; extension-quantified same-depth factors fail at every tested depth (distinct from the zero-padded API) |
 | `predictive_state_trace.py` | Which classes the real trajectory visits | All classes at horizon 10 within 5000 steps |
 | `truncation_period_stability.py` | Do width-K truncation periods converge? | No: 138→510→6258→2722 for K=20..40, p=2 |
 | `periodic_input_coverage.py` | Exact macro-cycle coverage under primitive periodic boundary words | At h=1, word `1` already lifts period 1 to machine period 2; h=6, word `10` visits 7 of 16 classes; periods 1..3 checked over 640 initial-state/word pairs |
