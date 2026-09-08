@@ -1,3 +1,12 @@
+<!-- portfolio
+{
+  "title": "Rule 30",
+  "topic": "Mathematics/Patterns & emergence",
+  "type": "research",
+  "description": "Finite observations and experiments around a deceptively simple cellular rule."
+}
+-->
+
 # Rule 30 Center Column: An Open-Problem Research Workspace
 
 This repository contains an ongoing attack on one of the simplest statements in mathematics
